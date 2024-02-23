@@ -1,7 +1,7 @@
 {
-    "name": "fuse-angular",
+    "name": "dolphin-angular-app",
     "version": "19.0.0",
-    "description": "Fuse - Angular Admin Template and Starter Project",
+    "description": "Dolphin App - Administration",
     "author": "https://themeforest.net/user/srcn",
     "license": "https://themeforest.net/licenses/standard",
     "private": true,
