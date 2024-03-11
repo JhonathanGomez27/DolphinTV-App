@@ -34,6 +34,6 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         title: 'Example',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
-        link : '/example'
+        link : '/example',
     }
 ];

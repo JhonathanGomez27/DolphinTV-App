@@ -1,0 +1,38 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden bg-card">
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 pb-10 sm:pt-12 sm:pb-12 sm:px-10 bg-default dark:bg-transparent" style="background-image: url('assets/images/dashboard/thumbnail.png');">
+        <div class="flex-1 min-w-0">
+            <!-- Breadcrumbs -->
+            <div>
+                <div class="flex">
+                    <a class="cursor-pointer p-2 flex items-center rounded-none bg-gray-100 text-lg" mat-flat-button (click)="locationBack()">
+                        <mat-icon class="text-current icon-size-4 mr-5" [svgIcon]="'mat_outline:arrow_back_ios'"></mat-icon>&nbsp; Volver
+                    </a>
+                    <!-- <a class="inline-flex items-center -ml-1.5 text-secondary font-medium" [routerLink]="'./..'">
+                        <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-left'"></mat-icon>
+                        <span class="ml-1">Volver</span>
+                    </a> -->
+                </div>
+            </div>
+            <!-- Title -->
+            <div class="mt-2">
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    Nombre del programa - {{yearSelected}}
+                </h2>
+                <h3 class="text-xl md:text-2xl font-semibold text-secondary tracking-tight leading-7 sm:leading-10 truncate">Desde - Hasta (Fechas de emisión)</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex-auto p-2 sm:p-5 shadow overflow-y-auto bg-card mt-5" cdkScrollable>
+
+        <!-- CONTENT GOES HERE -->
+        <div class="w-full">
+            <router-outlet></router-outlet>
+        </div>
+
+    </div>
+
+</div>

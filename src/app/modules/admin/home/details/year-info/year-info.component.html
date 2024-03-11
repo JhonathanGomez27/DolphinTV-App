@@ -1,0 +1,24 @@
+<div class="w-full">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        <ng-container *ngFor="let item of [1,1,1,1,1,1,1,1,1,1,1,1,1,1]; index as i">
+            <a class="p-2 hover:bg-zinc-100 cursor-pointer hover:shadow-md" [routerLink]="['./', 'chapter-1']">
+                <!-- img programa -->
+                <div class="w-full">
+                    <img src="assets/images/dashboard/thumbnail.png" alt="img capitulo">
+                </div>
+                <!-- tags -->
+                <div class="w-full mt-2">
+                    <div class="flex gap-2 overflow-hidden">
+                        <ng-container *ngFor="let item of [1,1,1,1,1,1]">
+                            <h2 class="bg-zinc-200 text-secondary px-2">Palabra</h2>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="mt-2"></div>
+                <!-- info cap -->
+                <h1 class="text-xl font-bold text-black tracking-normal">Capítulo {{i}}</h1>
+                <h3 class="text-secondary text-lg font-semibold">DD/MM/AAAA</h3>
+            </a>
+        </ng-container>
+    </div>
+</div>
