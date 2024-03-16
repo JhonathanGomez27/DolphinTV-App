@@ -1,10 +1,10 @@
 <div class="w-full">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-        <ng-container *ngFor="let item of [1,1,1,1,1,1,1,1,1,1,1,1,1,1]; index as i">
-            <a class="p-2 hover:bg-zinc-100 cursor-pointer hover:shadow-md" [routerLink]="['./', 'chapter-1']">
+        <ng-container *ngFor="let item of fichas; index as i">
+            <a class="p-2 hover:bg-zinc-100 cursor-pointer shadow-md rounded-md" [routerLink]="['./', item.clavePrincipal]">
                 <!-- img programa -->
-                <div class="w-full">
-                    <img src="assets/images/dashboard/thumbnail.png" alt="img capitulo">
+                <div class="w-full h-44">
+                    <img class="object-cover w-full h-full opacity-20" [src]="image" alt="img capitulo">
                 </div>
                 <!-- tags -->
                 <div class="w-full mt-2">
@@ -16,9 +16,12 @@
                 </div>
                 <div class="mt-2"></div>
                 <!-- info cap -->
-                <h1 class="text-xl font-bold text-black tracking-normal">Capítulo {{i}}</h1>
-                <h3 class="text-secondary text-lg font-semibold">DD/MM/AAAA</h3>
+                <h1 class="text-xl font-bold text-black tracking-normal">{{item.nombreArchivo}}</h1>
+                <h3 class="text-secondary text-lg font-semibold">{{item.fechaEmision}}</h3>
             </a>
         </ng-container>
+    </div>
+    <div class="flex w-full">
+        <mat-paginator class="bg-transparent" [length]="totalFichas" [pageIndex]="page" [pageSize]="limit" [showFirstLastButtons]="true" (page)="handlePageEvent($event)"></mat-paginator>
     </div>
 </div>

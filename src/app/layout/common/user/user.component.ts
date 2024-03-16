@@ -1,5 +1,5 @@
 import { BooleanInput } from '@angular/cdk/coercion';
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass, NgIf, TitleCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -17,7 +17,7 @@ import { Subject, takeUntil } from 'rxjs';
     changeDetection: ChangeDetectionStrategy.OnPush,
     exportAs       : 'user',
     standalone     : true,
-    imports        : [MatButtonModule, MatMenuModule, NgIf, MatIconModule, NgClass, MatDividerModule],
+    imports        : [MatButtonModule, MatMenuModule, NgIf, MatIconModule, NgClass, MatDividerModule, TitleCasePipe],
 })
 export class UserComponent implements OnInit, OnDestroy
 {
@@ -26,7 +26,7 @@ export class UserComponent implements OnInit, OnDestroy
     /* eslint-enable @typescript-eslint/naming-convention */
 
     @Input() showAvatar: boolean = true;
-    user: User;
+    user: any;
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 

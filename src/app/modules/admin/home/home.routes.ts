@@ -7,7 +7,9 @@ import { DetailsProgramComponent } from './details/details.component';
 import { ProgramYearsComponent } from './details/program-years/program-years.component';
 import { YearInfoComponent } from './details/year-info/year-info.component';
 import { ProgramInfoComponent } from './program-info/program-info.component';
-import { getProgramsResolve } from './home.resolver';
+import { getFichaDataResolve, getProgramDataResolve, getProgramFichasResolve, getProgramsResolve } from './home.resolver';
+import { getFichaFilter, getFiltroByProgramaResolve, getProgramaByIdResolve, getSubtituloFilter } from '../filters/filters.resolver';
+import { FichaFiltroComponent } from '../filters/ficha-filtro/ficha-filtro.component';
 
 export default [
     {
@@ -27,25 +29,47 @@ export default [
                 children: [
                     {
                         path: ':programa',
-                        component: ProgramYearsComponent
+                        component: ProgramYearsComponent,
+                        resolve: {
+                            data: getProgramDataResolve
+                        }
                     },
                     {
                         path: ':programa/:year',
-                        component: YearInfoComponent
+                        component: YearInfoComponent,
+                        resolve: {
+                            data: getProgramDataResolve,
+                            fichas: getProgramFichasResolve
+                        }
                     }
                 ]
             },
             {
                 path: 'ver/:programa/:year/:chapter',
-                component: ProgramInfoComponent
+                component: ProgramInfoComponent,
+                resolve: {
+                    ficha: getFichaDataResolve
+                }
             },
             {
                 path: 'filtro',
                 component: FiltersComponent,
             },
             {
-                path: 'filtro/:id',
-                component: DetailsComponent
+                path: 'filtro/:programa',
+                component: DetailsComponent,
+                resolve: {
+                    programaFiltro: getFiltroByProgramaResolve,
+                    programa: getProgramaByIdResolve
+                }
+            },
+            {
+                path: 'filtro/:programa/:ficha',
+                component: FichaFiltroComponent,
+                resolve:{
+                    fichaInfo: getFichaFilter,
+                    subtitulosFicha: getSubtituloFilter
+                }
             }
         ]
     },

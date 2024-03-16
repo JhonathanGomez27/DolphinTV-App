@@ -47,13 +47,13 @@
             <!-- Main Content -->
             <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-2">
                 <ng-container *ngFor="let programa of programas">
-                    <div [routerLink]="['/programas/ver/', programa.clavePrincipal]" class="col-span-1 flex flex-col cursor-pointer hover:bg-gray-100 p-2 rounded-sm hover:shadow-md">
+                    <div [routerLink]="['/programas/ver/', programa.clavePrincipal]" class="col-span-1 flex flex-col cursor-pointer hover:bg-gray-100 p-2 rounded-md shadow-inner">
                         <!-- container img program -->
-                        <div class="bg-black w-full">
-                            <img class="object-cover" src="assets/images/dashboard/thumbnail.png" alt="thumbnail programa">
+                        <div class="bg-black w-full h-40 overflow-hidden">
+                            <img class="object-cover h-full" [src]="getImgRoute(programa.imagen)" alt="thumbnail programa">
                         </div>
                         <p class="truncate pt-2 text-lg font-bold">{{programa.titulo}}</p>
-                        <p class="text-secondary text-md font-semibold">Desde - Hasta</p>
+                        <p class="text-secondary text-md font-semibold">{{programa.idioma}} - {{programa.productora}}</p>
                     </div>
                 </ng-container>
             </div>

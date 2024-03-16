@@ -7,15 +7,17 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, debounceTime, map, takeUntil } from 'rxjs';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import {MatRadioModule} from '@angular/material/radio';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSelectModule} from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { FiltersService } from './filters.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
     selector: 'app-filters',
@@ -23,30 +25,135 @@ import { RouterLink, RouterOutlet } from '@angular/router';
     templateUrl: './filters.component.html',
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ MatSidenavModule, MatRippleModule, NgClass, MatIconModule, NgIf, NgFor, MatButtonModule, MatFormFieldModule, MatInputModule, MatCheckboxModule, MatRadioModule, FormsModule, MatDatepickerModule, MatSelectModule, TitleCasePipe, MatMenuModule, MatPaginatorModule, RouterOutlet, RouterLink],
+    imports: [ MatSidenavModule, MatRippleModule, NgClass, MatIconModule, NgIf, NgFor, MatButtonModule, MatFormFieldModule, MatInputModule, MatCheckboxModule, MatRadioModule, FormsModule, MatDatepickerModule, MatSelectModule, TitleCasePipe, MatMenuModule, MatPaginatorModule, RouterOutlet, RouterLink, ReactiveFormsModule, MatProgressSpinnerModule],
 })
 export class FiltersComponent implements OnInit, OnDestroy{
 
     drawerMode: 'over' | 'side' = 'side';
     drawerOpened: boolean = true;
+    debounce: number = 1500;
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     sortFilter: any = 'Todos';
+    totalResultados: number = 0;
+    buscar: boolean = false;
 
     //categorias variables
     programas: boolean = true;
-    tags: boolean = false;
+    fichas: boolean = false;
 
+    //search bar
+    searchControl: UntypedFormControl = new UntypedFormControl();
+    programFilterForm: UntypedFormGroup;
+    fichasFilterForm: UntypedFormGroup;
+
+    resultados: any = [];
+
+    //pagination variables
+    page: number = 0;
+
+    //datos filtro
+    formatos: any = [null, '240p', '1080p'];
+    archivosRecibidos: any = [null, 'MXF', 'MPG4', 'AVI', 'MOV'];
+    archivosGuardados = [null, 'MXF', 'MPG4', 'AVI', 'MOV'];
+    resoluciones = [null, '1920x1080', '432x240'];
+    soportesDigitales = [null, 'Digital', 'Umatic', 'Betacam sp', 'Betacam Digital', 'Mini DV', 'DV Cam', 'DVC Pro', 'Estado Sólido'];
+
+    initial: string = 'init';
     constructor(
         private location: Location,
         private _changeDetectorRef: ChangeDetectorRef,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _adapter: DateAdapter<any>,
+        private _formBuilder: UntypedFormBuilder,
+        private _filterService: FiltersService,
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
     ) {
+        // Initialize the form
+        this.programFilterForm = this._formBuilder.group({
+            criterio: [null],
+            patrimonio: [null],
+            idioma: [null],
+            clasificacion: [null],
+        });
+
+        this.fichasFilterForm = this._formBuilder.group({
+            formato: [null],
+            tipoArchivoRecibido: [null],
+            tipoArchivoGuardado: [null],
+            resolucion: [null],
+            soporteFisicoGrabacion: [null],
+        });
     }
 
     ngOnInit(): void {
+        this._filterService.resultados = {};
+        this.activatedRoute.queryParams.subscribe(params => {
+            if(!params.page){
+                this.router.navigate([],{relativeTo: this.activatedRoute,queryParams: { page: '1' }});
+                this.page = 0;
+            }else{
+                this.page = parseInt(params.page) - 1;
+            }
+
+            if(params.busqueda && this.initial === 'init'){
+                this.searchControl.setValue(params.busqueda);
+            }
+
+            if(params.criterio){
+                this.programFilterForm.get('criterio').setValue(params.criterio);
+            }
+
+            if(params.patrimonio){
+                this.programFilterForm.get('patrimonio').setValue(params.patrimonio);
+            }
+
+
+            if(params.idioma){
+                this.programFilterForm.get('idioma').setValue(params.idioma);
+            }
+
+
+            if(params.clasificacion){
+                this.programFilterForm.get('clasificacion').setValue(params.clasificacion);
+            }
+
+
+            if(params.formato){
+                this.fichasFilterForm.get('formato').setValue(params.formato);
+            }
+
+            if(params.tipoArchivoRecibido){
+                this.fichasFilterForm.get('tipoArchivoRecibido').setValue(params.tipoArchivoRecibido);
+            }
+
+            if(params.soporteFisicoGrabacion){
+                this.fichasFilterForm.get('soporteFisicoGrabacion').setValue(params.soporteFisicoGrabacion);
+            }
+
+            if(params.tipoArchivoGuardado){
+                this.fichasFilterForm.get('tipoArchivoGuardado').setValue(params.tipoArchivoGuardado);
+            }
+
+            if(params.resolucion){
+                this.fichasFilterForm.get('resolucion').setValue(params.resolucion);
+            }
+
+            if(this.initial === 'init'){
+                this.buttonFiltrar();
+            }
+        });
+
+        this.initial = 'fin';
+
+        this._filterService.resultados.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
+            this.resultados = response?.resultados || [];
+            this.totalResultados = response?.total || 0;
+            this._changeDetectorRef.markForCheck();
+        });
+
         // Subscribe to media changes
         this._fuseMediaWatcherService.onMediaChange$.pipe(takeUntil(this._unsubscribeAll)).subscribe(
             ({matchingAliases}) =>{
@@ -66,6 +173,24 @@ export class FiltersComponent implements OnInit, OnDestroy{
                 this._changeDetectorRef.markForCheck();
             }
         );
+
+         // Subscribe to the search field value changes
+        this.searchControl.valueChanges.pipe(debounceTime(this.debounce),takeUntil(this._unsubscribeAll)).subscribe((value) =>
+        {
+            if(value !== ''){
+                this.router.navigate([],{relativeTo: this.activatedRoute,queryParams: { busqueda: value }, queryParamsHandling: 'merge'});
+
+                if(!this.buscar){
+                    this.buttonFiltrar();
+                }
+                // console.log("object");
+                this._changeDetectorRef.markForCheck();
+            }else{
+                this.router.navigate([],{relativeTo: this.activatedRoute,queryParams: { busqueda: null }, queryParamsHandling: 'merge'});
+
+                this._changeDetectorRef.markForCheck();
+            }
+        });
     }
 
     ngOnDestroy(): void
@@ -86,12 +211,108 @@ export class FiltersComponent implements OnInit, OnDestroy{
     //-----------------------------------
     // filter functions
     //-----------------------------------
+    setQueryParam(campo: string, value:string){
+        this.router.navigate([],{relativeTo: this.activatedRoute,queryParams: { [campo]: value }, queryParamsHandling: 'merge'});
+
+        this._changeDetectorRef.markForCheck();
+    }
 
     onCategoriaChange(categoria: any){
         if(categoria === 'programas'){
-            this.tags = !this.programas;
+            this.fichas = !this.programas;
         }else{
-            this.programas = !this.tags;
+            this.programas = !this.fichas;
+        }
+
+        this._changeDetectorRef.markForCheck();
+    }
+
+    buttonFiltrar(){
+        this.buscar = true;
+        this.page = 0;
+        let pagina = this.page + 1;
+        let programaF = this.programFilterForm.getRawValue();
+        let fichasF = this.fichasFilterForm.getRawValue();
+
+        for (const [key, value] of Object.entries(programaF)) {
+            if(value === '' || value === null){
+                delete programaF[key];
+            }
+        }
+
+        for (const [key, value] of Object.entries(fichasF)) {
+            if(value === '' || value === null){
+                delete fichasF[key];
+            }
+        }
+
+        let data = {
+            programaFiltros: {
+                ...programaF
+            },
+            fichaFiltros: {
+                ...fichasF
+            },
+            palabraClave: this.searchControl.value || '',
+        }
+
+        if(data.palabraClave !== '' || Object.keys(data.fichaFiltros).length || Object.keys(data.programaFiltros).length){
+            this.filtroPaginated(pagina, data);
+        }else{
+            this.buscar = false;
+        }
+    }
+
+    filtroPaginated(page:any, data:any){
+        this._filterService.getFiltrosBusqueda(page, data).pipe(takeUntil(this._unsubscribeAll)).subscribe(
+            (response:any) => {
+
+                this._filterService.resultados = response;
+                this.buscar = false;
+                this._changeDetectorRef.markForCheck();
+            },(error) => {
+                this.buscar = false;
+                this._changeDetectorRef.markForCheck();
+                console.log(error);
+            }
+        );
+    }
+
+    //-----------------------------------
+    // Paginator section
+    //-----------------------------------
+    handlePageChangeEvent(event: PageEvent){
+        let pagina = event.pageIndex + 1;
+
+        let programaF = this.programFilterForm.getRawValue();
+        let fichasF = this.fichasFilterForm.getRawValue();
+
+        for (const [key, value] of Object.entries(programaF)) {
+            if(value === '' || value === null){
+                delete programaF[key];
+            }
+        }
+
+        for (const [key, value] of Object.entries(fichasF)) {
+            if(value === '' || value === null){
+                delete fichasF[key];
+            }
+        }
+
+        let data = {
+            programaFiltros: {
+                ...programaF
+            },
+            fichaFiltros: {
+                ...fichasF
+            },
+            palabraClave: this.searchControl.value || '',
+        }
+
+        if(data.palabraClave !== '' || Object.keys(data.fichaFiltros).length || Object.keys(data.programaFiltros).length){
+            this.filtroPaginated(pagina, data);
+        }else{
+            this.buscar = false;
         }
     }
 

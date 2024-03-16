@@ -60,6 +60,18 @@ export class ListComponent implements OnInit, OnDestroy {
         this._unsubscribeAll.complete();
     }
 
+    getImgRoute(imagen: any): string{
+        let image: string = '';
+        if(imagen !== null){
+            let result = imagen.split("\\");
+            image = `${result[result.length - 1]}`;
+        }else{
+            image = "assets/images/dashboard/thumbnail.png";
+        }
+
+        return image;
+    }
+
     //-----------------------------------
     // sort functions
     //-----------------------------------

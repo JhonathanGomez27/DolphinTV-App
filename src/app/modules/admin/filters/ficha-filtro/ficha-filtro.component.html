@@ -6,7 +6,7 @@
         <div class="min-h-100 ">
             <!-- back button -->
             <div class="flex">
-                <a class="cursor-pointer p-2 flex items-center rounded-none bg-gray-100 text-lg" mat-flat-button [routerLink]="[routeBack]">
+                <a class="cursor-pointer p-2 flex items-center rounded-none bg-gray-100 text-lg" mat-flat-button [routerLink]="['/programas/filtro', ficha.id_programa]" queryParamsHandling="merge">
                     <mat-icon class="text-current icon-size-4 mr-5" [svgIcon]="'mat_outline:arrow_back_ios'"></mat-icon>&nbsp; Volver
                 </a>
             </div>
@@ -63,7 +63,7 @@
             <div class="w-full">
                 <mat-form-field class="w-full " [subscriptSizing]="'dynamic'">
                     <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:magnifying-glass'" matPrefix></mat-icon>
-                    <input matInput placeholder="Realizar búsqueda">
+                    <input matInput placeholder="Realizar búsqueda" [formControl]="searchControl">
                 </mat-form-field>
             </div>
             <!-- content -->
@@ -76,6 +76,7 @@
                         </p>
                     </div>
                 </ng-container>
+                <mat-paginator class="bg-transparent" [length]="totalResponse" [pageIndex]="page" [pageSize]="20" [showFirstLastButtons]="true" (page)="handlePageEnvent($event)"></mat-paginator>
             </div>
         </div>
 

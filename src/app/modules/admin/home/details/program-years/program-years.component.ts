@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
 import { HomeProgramService } from '../../home.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-program-years',
@@ -13,9 +14,13 @@ import { HomeProgramService } from '../../home.service';
 })
 export class ProgramYearsComponent implements OnInit{
 
+    private _unsubscribeAll: Subject<any> = new Subject<any>();
+    dataYears: any = [];
+
     constructor(
         private _programService: HomeProgramService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private _changeDetectorRef: ChangeDetectorRef
     ){
         _programService.yearSelected = '';
     }
@@ -23,6 +28,11 @@ export class ProgramYearsComponent implements OnInit{
     ngOnInit(): void {
         this._programService.yearSelected = '';
         this._programService.routeBack = `/programas`;
+
+        this._programService.programa.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
+            this.dataYears = response.emisionArray;
+            this._changeDetectorRef.markForCheck();
+        });
     }
 
     setyear(year:any):void{

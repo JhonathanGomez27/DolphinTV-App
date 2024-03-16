@@ -22,7 +22,7 @@
     <button mat-menu-item>
         <span class="flex flex-col leading-none p-2">
             <span>Sesión iniciada como.</span>
-            <span class="mt-1.5 text-md font-medium">Carlos perez</span>
+            <span class="mt-1.5 text-md font-medium">{{user.rol | titlecase}}</span>
             <span class="mt-1.5 text-md font-medium">{{user?.email}}</span>
         </span>
     </button>

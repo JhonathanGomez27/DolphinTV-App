@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from 'environments/environment';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class HomeProgramService {
@@ -12,13 +12,16 @@ export class HomeProgramService {
 
     // variables navegacion
     private _routeBack: string = '';
-    private _yearSelected: BehaviorSubject<string> = new BehaviorSubject<string>('');
+    private _yearSelected: Subject<string> = new Subject<string>();
 
     // cliente http
     private _httpClient = inject(HttpClient);
 
     // variables datos
     private _programas:  BehaviorSubject<any | null> = new BehaviorSubject(null);
+    private _programa:  BehaviorSubject<any | null> = new BehaviorSubject(null);
+    private _fichas:  BehaviorSubject<any | null> = new BehaviorSubject(null);
+    private _ficha:  BehaviorSubject<any | null> = new BehaviorSubject(null);
 
     //-----------------------------------
     // Getter and setter
@@ -48,6 +51,26 @@ export class HomeProgramService {
         return this._programas.asObservable();
     }
 
+    set programa(data: any){
+        this._programa.next(data);
+    }
+
+    get programa(): Observable<string>{
+        return this._programa.asObservable();
+    }
+
+    set fichas(data: any){
+        this._fichas.next(data);
+    }
+
+    get fichas(): Observable<string>{
+        return this._fichas.asObservable();
+    }
+
+    get ficha(): Observable<string>{
+        return this._ficha.asObservable();
+    }
+
     //-----------------------------------
     // programas
     //-----------------------------------
@@ -62,6 +85,57 @@ export class HomeProgramService {
                 this._programas.next(response);
             })
         );
+    }
+
+    getDataPrograma(programa: any): Observable<any> {
+        return this._httpClient.get(`${this.url}programas/oneById/${programa}`).pipe(
+            tap((response) => {
+                // console.log(response);
+                this._programa.next(response);
+            })
+        );
+    }
+
+    getDataProgramaUpdate(programa: any): Observable<any> {
+        return this._httpClient.get(`${this.url}programas/oneById/${programa}`);
+    }
+
+    getFichasPrograma(programa: any, anio:any, page:any): Observable<any> {
+        let params = new HttpParams();
+        params = params.set('page', page);
+        params = params.set('limit', this.limit);
+
+        return this._httpClient.get(`${this.url}programas/fichasByProgramaYAnio/${programa}/${anio}`, {params}).pipe(
+            tap((response) => {
+                // console.log(response);
+                this._fichas.next(response);
+            })
+        );
+    }
+
+    getFichasProgramaPaginated(programa: any, anio:any, page:any): Observable<any> {
+        let params = new HttpParams();
+        params = params.set('page', page);
+        params = params.set('limit', this.limit);
+
+        return this._httpClient.get(`${this.url}programas/fichasByProgramaYAnio/${programa}/${anio}`, {params});
+    }
+
+    getFichaInfo(ficha: any): Observable<any> {
+        let params = new HttpParams();
+        params = params.set('page', 1);
+        params = params.set('limit', this.limit);
+
+        return this._httpClient.get(`${this.url}fichas/oneById/${ficha}`, {params}).pipe(
+            tap((response) => {
+                // console.log(response);
+                this._ficha.next(response);
+            })
+        );
+    }
+
+    uploadImageProgram(file:any, programa: any): Observable<any> {
+        return this._httpClient.post(`${this.url}programas/subir-imagen/${programa}`, file);
     }
 
     // obtenerTorneosRefresh(): Observable<any> {
