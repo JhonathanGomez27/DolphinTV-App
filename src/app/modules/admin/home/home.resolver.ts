@@ -45,3 +45,17 @@ export const getFichaDataResolve: ResolveFn<any> = (route: ActivatedRouteSnapsho
 
     return inject(HomeProgramService).getFichaInfo(chapter);
 }
+
+export const getSubtituloFilterProgram: ResolveFn<any> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+    let ficha:any = '';
+    if(route.paramMap.has('chapter')){
+       ficha = route.paramMap.get('chapter');
+    }
+
+    let data: any = {palabraClave: ''};
+    if(route.queryParamMap.has('busqueda')){
+        data.palabraClave = route.queryParamMap.get('busqueda') || '';
+    }
+
+    return inject(HomeProgramService).getSubTitulosFicha(1, ficha, data);
+}

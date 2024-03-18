@@ -22,6 +22,7 @@ export class HomeProgramService {
     private _programa:  BehaviorSubject<any | null> = new BehaviorSubject(null);
     private _fichas:  BehaviorSubject<any | null> = new BehaviorSubject(null);
     private _ficha:  BehaviorSubject<any | null> = new BehaviorSubject(null);
+    private _subtitulos:  BehaviorSubject<any | null> = new BehaviorSubject(null);
 
     //-----------------------------------
     // Getter and setter
@@ -69,6 +70,14 @@ export class HomeProgramService {
 
     get ficha(): Observable<string>{
         return this._ficha.asObservable();
+    }
+
+    set subtitulos(values: any){
+        this._subtitulos.next(values);
+    }
+
+    get subtitulos(): Observable<string>{
+        return this._subtitulos.asObservable();
     }
 
     //-----------------------------------
@@ -141,4 +150,24 @@ export class HomeProgramService {
     // obtenerTorneosRefresh(): Observable<any> {
     //     return this._httpClient.get(`${this.url}torneos`);
     // }
+
+    getSubTitulosFicha(page:any, ficha: any, datos:any): Observable<any> {
+        let params = new HttpParams();
+        params = params.set('page', page);
+        params = params.set('limit', this.limit);
+
+        return this._httpClient.post(`${this.url}fichas/buscar/${ficha}`, datos, {params}).pipe(
+            tap((response) => {
+                this._subtitulos.next(response);
+            })
+        );
+    }
+
+    getSubTitulosFichaPaginated(page:any, ficha: any, datos:any): Observable<any> {
+        let params = new HttpParams();
+        params = params.set('page', page);
+        params = params.set('limit', this.limit);
+
+        return this._httpClient.post(`${this.url}fichas/buscar/${ficha}`, datos, {params})
+    }
 }

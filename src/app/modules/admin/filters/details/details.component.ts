@@ -96,6 +96,23 @@ export class DetailsComponent implements OnInit, OnDestroy{
             }
         );
     }
+
+    //-----------------------------------
+    // images function
+    //-----------------------------------
+
+    getImgRoute(imagen: any): string{
+        let image: string = '';
+        if(imagen !== null){
+            let result = imagen.split("html/")[1];
+            image = `http://3.147.140.118/${result}`;
+        }else{
+            image = "assets/images/dashboard/thumbnail.png";
+        }
+
+        return image;
+    }
+
     //-----------------------------------
     // router functions
     //-----------------------------------

@@ -57,9 +57,8 @@ export class YearInfoComponent implements OnInit{
             this.programa = response.programa;
             if(response.programa.imagen !== null && response.programa.imagen !== ''){
                 let path = response.programa.imagen;
-                let result = path.split("\\");
-
-                this.image = `${result[result.length - 1]}`;
+                let result = path.split("html/")[1];
+                this.image = `http://3.147.140.118/${result}`;
             }else{
                 this.image = "assets/images/dashboard/thumbnail.png";
             }

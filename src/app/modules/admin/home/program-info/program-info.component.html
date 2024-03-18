@@ -63,7 +63,7 @@
             <div class="w-full">
                 <mat-form-field class="w-full " [subscriptSizing]="'dynamic'">
                     <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:magnifying-glass'" matPrefix></mat-icon>
-                    <input matInput placeholder="Realizar búsqueda">
+                    <input matInput placeholder="Realizar búsqueda" [formControl]="searchControl">
                 </mat-form-field>
             </div>
             <!-- content -->
@@ -76,6 +76,7 @@
                         </p>
                     </div>
                 </ng-container>
+                <mat-paginator class="bg-transparent" [length]="totalResponse" [pageIndex]="page" [pageSize]="20" [showFirstLastButtons]="true" (page)="handlePageEnvent($event)"></mat-paginator>
             </div>
         </div>
 

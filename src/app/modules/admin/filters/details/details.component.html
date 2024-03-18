@@ -12,7 +12,9 @@
             </div>
             <!-- program information -->
             <div class="p-2 w-full flex flex-col">
-                <img src="assets/images/dashboard/thumbnail.png" alt="img programa">
+                <div class="w-full h-72">
+                    <img class="h-full object-cover" [src]="getImgRoute(programa.imagen)" alt="img programa">
+                </div>
                 <p class="text-2xl font-bold mt-4 text-black">{{programa.titulo}}</p>
                 <p class="font-medium text-secondary text-xl">{{programa.idioma}} - {{programa.productora}}</p>
                 <p class="font-semibold text-gray-700 text-base mt-4">Tags que coinciden</p>
@@ -35,7 +37,7 @@
                 <a class="flex flex-col border p-3 border-l-8 border-zinc-200 mb-3 cursor-pointer hover:bg-zinc-100 hover:shadow-md" [routerLink]="['/programas/filtro', programa.clavePrincipal, item.ficha.clavePrincipal]" queryParamsHandling="merge">
                     <div class="flex flex-row justify-between items-center">
                         <p class="text-xl font-bold text-black">{{item.ficha.nombreArchivo}}</p>
-                        <p class="text-lg font-normal text-secondary">{{item.coincidencias}} Conicidencias</p>
+                        <p class="text-lg font-normal text-secondary" *ngIf="item.coincidencias">{{item.coincidencias}} Conicidencias</p>
                     </div>
                     <div class="flex justify-between">
                         <p class="text-lg text-secondary font-medium">{{item.ficha.copyright}}</p>

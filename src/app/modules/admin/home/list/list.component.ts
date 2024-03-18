@@ -63,8 +63,8 @@ export class ListComponent implements OnInit, OnDestroy {
     getImgRoute(imagen: any): string{
         let image: string = '';
         if(imagen !== null){
-            let result = imagen.split("\\");
-            image = `${result[result.length - 1]}`;
+            let result = imagen.split("html/")[1];
+            image = `http://3.147.140.118/${result}`;
         }else{
             image = "assets/images/dashboard/thumbnail.png";
         }

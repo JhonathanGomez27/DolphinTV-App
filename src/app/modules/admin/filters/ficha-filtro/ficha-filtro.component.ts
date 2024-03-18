@@ -36,6 +36,7 @@ export class FichaFiltroComponent implements OnInit, OnDestroy{
     debounce: number = 1500;
     loading: boolean = false;
 
+    initital: string = 'init';
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -46,12 +47,13 @@ export class FichaFiltroComponent implements OnInit, OnDestroy{
     ngOnInit() {
 
         this.activatedRoute.queryParams.subscribe(params => {
-            if(params.busqueda){
+            if(params.busqueda && this.initital === 'init'){
                 this.searchControl.setValue(params.busqueda)
             }
             this._changeDetectorRef.markForCheck();
         });
 
+        this.initital = 'fin';
 
         this._filtersService.ficha.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
 

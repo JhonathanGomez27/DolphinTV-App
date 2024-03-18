@@ -178,7 +178,7 @@ export class FiltersComponent implements OnInit, OnDestroy{
         this.searchControl.valueChanges.pipe(debounceTime(this.debounce),takeUntil(this._unsubscribeAll)).subscribe((value) =>
         {
             if(value !== ''){
-                this.router.navigate([],{relativeTo: this.activatedRoute,queryParams: { busqueda: value }, queryParamsHandling: 'merge'});
+                // this.router.navigate([],{relativeTo: this.activatedRoute,queryParams: { busqueda: value }, queryParamsHandling: 'merge'});
 
                 if(!this.buscar){
                     this.buttonFiltrar();
@@ -269,11 +269,13 @@ export class FiltersComponent implements OnInit, OnDestroy{
 
                 this._filterService.resultados = response;
                 this.buscar = false;
+
+                this.router.navigate([],{relativeTo: this.activatedRoute,queryParams: { busqueda: data.palabraClave }, queryParamsHandling: 'merge'});
+
                 this._changeDetectorRef.markForCheck();
             },(error) => {
                 this.buscar = false;
                 this._changeDetectorRef.markForCheck();
-                console.log(error);
             }
         );
     }
@@ -314,6 +316,21 @@ export class FiltersComponent implements OnInit, OnDestroy{
         }else{
             this.buscar = false;
         }
+    }
+
+    //-----------------------------------
+    // Functions images
+    //-----------------------------------
+    getImgRoute(imagen: any): string{
+        let image: string = '';
+        if(imagen !== null){
+            let result = imagen.split("html/")[1];
+            image = `http://3.147.140.118/${result}`;
+        }else{
+            image = "assets/images/dashboard/thumbnail.png";
+        }
+
+        return image;
     }
 
     //-----------------------------------

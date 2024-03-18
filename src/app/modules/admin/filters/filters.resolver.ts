@@ -64,7 +64,7 @@ export const getSubtituloFilter: ResolveFn<any> = (route: ActivatedRouteSnapshot
        ficha = route.paramMap.get('ficha');
     }
 
-    let data: any = {};
+    let data: any = {palabraClave: ''};
     if(route.queryParamMap.has('busqueda')){
         data.palabraClave = route.queryParamMap.get('busqueda') || '';
     }
