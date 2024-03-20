@@ -87,6 +87,21 @@ export class HomeProgramService {
         let params = new HttpParams();
         params = params.set('page', page);
         params = params.set('limit', this.limit);
+        params = params.set('orden', 'ASC');
+
+        return this._httpClient.get(`${this.url}programas/paginados`, {params}).pipe(
+            tap((response) => {
+                // console.log(response);
+                this._programas.next(response);
+            })
+        );
+    }
+
+    getProgramasOrdenados(page: any, orden: any): Observable<any> {
+        let params = new HttpParams();
+        params = params.set('page', page);
+        params = params.set('limit', this.limit);
+        params = params.set('orden', orden);
 
         return this._httpClient.get(`${this.url}programas/paginados`, {params}).pipe(
             tap((response) => {
@@ -109,12 +124,14 @@ export class HomeProgramService {
         return this._httpClient.get(`${this.url}programas/oneById/${programa}`);
     }
 
-    getFichasPrograma(programa: any, anio:any, page:any): Observable<any> {
+    getFichasPrograma(programa: any, anio:any, page:any, data: any): Observable<any> {
         let params = new HttpParams();
         params = params.set('page', page);
         params = params.set('limit', this.limit);
+        params = params.set('criterioOrden', 'alfabetico');
+        params = params.set('orden', 'ASC');
 
-        return this._httpClient.get(`${this.url}programas/fichasByProgramaYAnio/${programa}/${anio}`, {params}).pipe(
+        return this._httpClient.post(`${this.url}programas/fichasByProgramaYAnio/${programa}/${anio}`, data, {params}).pipe(
             tap((response) => {
                 // console.log(response);
                 this._fichas.next(response);
@@ -122,12 +139,14 @@ export class HomeProgramService {
         );
     }
 
-    getFichasProgramaPaginated(programa: any, anio:any, page:any): Observable<any> {
+    getFichasProgramaPaginated(programa: any, anio:any, page:any, criterio: string, orden: string, data:any): Observable<any> {
         let params = new HttpParams();
         params = params.set('page', page);
         params = params.set('limit', this.limit);
+        params = params.set('criterioOrden', criterio);
+        params = params.set('orden', orden);
 
-        return this._httpClient.get(`${this.url}programas/fichasByProgramaYAnio/${programa}/${anio}`, {params});
+        return this._httpClient.post(`${this.url}programas/fichasByProgramaYAnio/${programa}/${anio}`, data, {params});
     }
 
     getFichaInfo(ficha: any): Observable<any> {

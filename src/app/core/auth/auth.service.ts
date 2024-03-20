@@ -28,6 +28,11 @@ export class AuthService
 
     get accessToken(): string
     {
+        const token = localStorage.getItem('accessToken') ?? '';
+        if(token === 'undefined'){
+            this.signOut();
+            location.reload();
+        }
         return localStorage.getItem('accessToken') ?? '';
     }
 

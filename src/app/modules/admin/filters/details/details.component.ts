@@ -27,6 +27,8 @@ export class DetailsComponent implements OnInit, OnDestroy{
     totalResultados: number = 0;
     params: any = {};
 
+    loading: boolean = false;
+
     constructor(
         private location: Location,
         private _changeDetectorRef: ChangeDetectorRef,
@@ -42,7 +44,7 @@ export class DetailsComponent implements OnInit, OnDestroy{
         this.activatedRoute.queryParams.subscribe(params => {
             this.params = params;
             for (const [key, value] of Object.entries(params)) {
-                if(key !== 'page'){
+                if(key !== 'page' && key !== 'idsProgramas'){
                     this.tags.push(value);
                 }
             }
@@ -71,6 +73,7 @@ export class DetailsComponent implements OnInit, OnDestroy{
     // pagination
     //-----------------------------------
     handlePageEnvent(event: PageEvent){
+        this.loading = true;
         let pagina: any = event.pageIndex + 1;
         const {criterio, patrimonio, idioma, clasificacion, page, busqueda, ...paramsB} = this.params;
         let datos:any = {};
@@ -85,14 +88,20 @@ export class DetailsComponent implements OnInit, OnDestroy{
 
         this.getDataByProgramaPaginated(pagina, datos);
 
+        this._changeDetectorRef.markForCheck();
+
     }
 
     getDataByProgramaPaginated(page:any, datos:any){
         this._filtersService.getFiltrosByProgramaPaginated(page, datos, this.programa.clavePrincipal).pipe(takeUntil(this._unsubscribeAll)).subscribe(
             (response:any) => {
+                this.loading = false;
                 this._filtersService.filtroResultado = response;
+                this._changeDetectorRef.markForCheck();
             },(error) => {
                 console.log(error);
+                this.loading = false;
+                this._changeDetectorRef.markForCheck();
             }
         );
     }
@@ -105,7 +114,7 @@ export class DetailsComponent implements OnInit, OnDestroy{
         let image: string = '';
         if(imagen !== null){
             let result = imagen.split("html/")[1];
-            image = `http://3.147.140.118/${result}`;
+            image = `http://3.18.149.205/${result}`;
         }else{
             image = "assets/images/dashboard/thumbnail.png";
         }

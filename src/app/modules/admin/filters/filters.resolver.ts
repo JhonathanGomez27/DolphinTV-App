@@ -73,3 +73,8 @@ export const getSubtituloFilter: ResolveFn<any> = (route: ActivatedRouteSnapshot
 
     return inject(FiltersService).getSubTitulosFicha(1, ficha, data);
 }
+
+
+export const getProgramsFilterResolve: ResolveFn<any> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+    return inject(FiltersService).getProgramas(1);
+}

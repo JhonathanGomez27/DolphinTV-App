@@ -4,6 +4,16 @@
 
         <!-- CONTENT GOES HERE -->
         <div class="min-h-100 ">
+            <!-- Breadcrumbs -->
+            <div class="flex flex-wrap items-center font-medium p-2">
+                <a class="whitespace-nowrap text-primary-500" [routerLink]="['/programas/filtro']" queryParamsHandling="merge">Filtros</a>
+                <div class="flex items-center ml-1 whitespace-nowrap">
+                    <mat-icon
+                        class="icon-size-5 text-secondary"
+                        [svgIcon]="'heroicons_mini:chevron-right'"></mat-icon>
+                    <a class="ml-1 text-primary-500">{{programa.titulo}}</a>
+                </div>
+            </div>
             <!-- back button -->
             <div class="w-full p-2">
                 <button class="cursor-pointer p-2 flex items-center rounded-none bg-gray-100 text-lg" mat-flat-button [routerLink]="['/programas/filtro']" queryParamsHandling="merge">
@@ -51,7 +61,7 @@
                 </a>
             </ng-container>
 
-            <mat-paginator class="bg-transparent" [length]="totalResultados" [pageIndex]="page" [pageSize]="20" [showFirstLastButtons]="true" (page)="handlePageEnvent($event)"></mat-paginator>
+            <mat-paginator class="bg-transparent" [length]="totalResultados" [pageIndex]="page" [pageSize]="20" [showFirstLastButtons]="true" (page)="handlePageEnvent($event)" [disabled]="loading"></mat-paginator>
         </div>
     </div>
 </div>

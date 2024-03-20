@@ -8,7 +8,7 @@ import { ProgramYearsComponent } from './details/program-years/program-years.com
 import { YearInfoComponent } from './details/year-info/year-info.component';
 import { ProgramInfoComponent } from './program-info/program-info.component';
 import { getFichaDataResolve, getProgramDataResolve, getProgramFichasResolve, getProgramsResolve, getSubtituloFilterProgram } from './home.resolver';
-import { getFichaFilter, getFiltroByProgramaResolve, getProgramaByIdResolve, getSubtituloFilter } from '../filters/filters.resolver';
+import { getFichaFilter, getFiltroByProgramaResolve, getProgramaByIdResolve, getProgramsFilterResolve, getSubtituloFilter } from '../filters/filters.resolver';
 import { FichaFiltroComponent } from '../filters/ficha-filtro/ficha-filtro.component';
 
 export default [
@@ -49,12 +49,16 @@ export default [
                 component: ProgramInfoComponent,
                 resolve: {
                     ficha: getFichaDataResolve,
-                    subtitulosFichaP: getSubtituloFilterProgram
+                    subtitulosFichaP: getSubtituloFilterProgram,
+                    data: getProgramDataResolve,
                 }
             },
             {
                 path: 'filtro',
                 component: FiltersComponent,
+                resolve: {
+                    programas: getProgramsFilterResolve
+                }
             },
             {
                 path: 'filtro/:programa',
@@ -69,7 +73,8 @@ export default [
                 component: FichaFiltroComponent,
                 resolve:{
                     fichaInfo: getFichaFilter,
-                    subtitulosFicha: getSubtituloFilter
+                    subtitulosFicha: getSubtituloFilter,
+                    programa: getProgramaByIdResolve
                 }
             }
         ]

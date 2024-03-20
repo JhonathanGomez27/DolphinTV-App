@@ -129,6 +129,24 @@
                         </div>
                     </form>
                 </ng-container>
+
+                <ng-container >
+                    <!-- Programa -->
+                    <div class="px-5 mt-2">
+                        <p class="text-secondary font-medium">Programas</p>
+                        <!-- <mat-form-field class="w-full mt-2" [subscriptSizing]="'dynamic'">
+                            <input matInput placeholder="Buscar programa">
+                        </mat-form-field> -->
+                        <div class="overflow-y-auto h-60 mt-3">
+                            <ng-container *ngFor="let programa of programasList">
+                                <mat-checkbox class="example-margin" [(ngModel)]="programasSelected[programa.clavePrincipal]" (change)="programaSelected($event, programa.clavePrincipal)">
+                                    <img [src]="getImgRoute(programa.imagen)" class="w-10 h-6" width="10" height="6" alt="imagen del programa">
+                                    <p class="font-semibold">{{programa.titulo}}</p>
+                                </mat-checkbox>
+                            </ng-container>
+                        </div>
+                    </div>
+                </ng-container>
             </div>
 
             <div class="p-2 mt-2 bg-white">
@@ -152,7 +170,7 @@
                             <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:magnifying-glass'" matPrefix></mat-icon>
                             <input matInput [autocomplete]="'off'" [formControl]="searchControl" [placeholder]="'Realizar busqueda'" #searchInput>
                         </mat-form-field>
-                        <button class="sm:inline-flex" mat-button [matMenuTriggerFor]="orderByMenu">
+                        <!-- <button class="sm:inline-flex" mat-button [matMenuTriggerFor]="orderByMenu">
                             <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:bars-arrow-down'"></mat-icon>
                             <span class="hidden sm:inline-block ml-2">Ordenar</span>
                         </button>
@@ -182,13 +200,13 @@
                                     <span>Alfabeticamente: Descendente</span>
                                 </span>
                             </button>
-                        </mat-menu>
+                        </mat-menu> -->
                     </div>
                 </div>
 
                 <div class="flex w-full justify-between px-5 py-2">
                     <p class="text-secondary font-semibold">{{totalResultados}} resultados encontrados</p>
-                    <p class="text-secondary font-normal">Ordenado por: {{sortFilter}}</p>
+                    <!-- <p class="text-secondary font-normal">Ordenado por: {{sortFilter}}</p> -->
                 </div>
 
                 <!-- CONTENT GOES HERE -->
@@ -197,22 +215,22 @@
                         <ng-container *ngIf="totalResultados > 0; else noResultados">
                             <div class="border-2 p-4 mb-4" *ngFor="let item of resultados">
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    <div class="w-full h-60 overflow-hidden">
+                                    <a class="w-full h-60 overflow-hidden" [routerLink]="['/programas/filtro', item.programa.clavePrincipal]" queryParamsHandling="merge">
                                         <img class="h-full object-cover" [src]="getImgRoute(item.programa.imagen)" alt="img video">
-                                    </div>
+                                    </a>
                                     <div class="w-full">
-                                        <p class="font-semibold text-2xl">{{item.programa.titulo}}</p>
+                                        <a [routerLink]="['/programas/filtro', item.programa.clavePrincipal]" queryParamsHandling="merge"><p class="font-semibold text-2xl">{{item.programa.titulo}}</p></a>
                                         <p class="text-secondary font-medium text-xl">{{item.programa.productora}} - {{item.programa.idioma}}</p>
                                         <div class="grid grid-cols-4 mt-3 items-center gap-4">
                                             <ng-container *ngFor="let ficha of item.fichas;let i = index; let first = first; let last = last">
                                                 <ng-container *ngIf="first || i == 1">
-                                                    <div class="h-14 col-span-1">
+                                                    <a class="h-14 col-span-1" [routerLink]="['/programas/filtro', item.programa.clavePrincipal, ficha.clavePrincipal]" queryParamsHandling="merge">
                                                         <img class="h-full object-cover opacity-20" [src]="getImgRoute(item.programa.imagen)" alt="">
-                                                    </div>
-                                                    <div class="col-span-3 flex flex-col">
+                                                    </a>
+                                                    <a class="col-span-3 flex flex-col" [routerLink]="['/programas/filtro', item.programa.clavePrincipal, ficha.clavePrincipal]" queryParamsHandling="merge">
                                                         <p class="font-semibold text-xl">{{ficha.nombreArchivo}}</p>
                                                         <p class="text-secondary font-semibold text-xl">{{ficha.copyright}}</p>
-                                                    </div>
+                                                    </a>
                                                 </ng-container>
                                             </ng-container>
                                         </div>

@@ -8,7 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { Subject, debounceTime, map, takeUntil } from 'rxjs';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import {MatRadioModule} from '@angular/material/radio';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
@@ -61,6 +61,14 @@ export class FiltersComponent implements OnInit, OnDestroy{
     soportesDigitales = [null, 'Digital', 'Umatic', 'Betacam sp', 'Betacam Digital', 'Mini DV', 'DV Cam', 'DVC Pro', 'Estado Sólido'];
 
     initial: string = 'init';
+
+    programasList: any = [];
+
+    programasSelected: any = {};
+    idsQuery: any = {};
+
+    idsSelected: any = [];
+
     constructor(
         private location: Location,
         private _changeDetectorRef: ChangeDetectorRef,
@@ -141,6 +149,14 @@ export class FiltersComponent implements OnInit, OnDestroy{
                 this.fichasFilterForm.get('resolucion').setValue(params.resolucion);
             }
 
+            if(params.idsProgramas){
+                const listIdsProgramas = JSON.parse(params.idsProgramas);
+                this.programasSelected = {...listIdsProgramas};
+                this.idsQuery = {...listIdsProgramas};
+
+                this.ordenarIds(this.idsQuery);
+            }
+
             if(this.initial === 'init'){
                 this.buttonFiltrar();
             }
@@ -173,6 +189,11 @@ export class FiltersComponent implements OnInit, OnDestroy{
                 this._changeDetectorRef.markForCheck();
             }
         );
+
+        this._filterService.programas.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
+            this.programasList = response.data;
+            this._changeDetectorRef.markForCheck();
+        });
 
          // Subscribe to the search field value changes
         this.searchControl.valueChanges.pipe(debounceTime(this.debounce),takeUntil(this._unsubscribeAll)).subscribe((value) =>
@@ -254,9 +275,11 @@ export class FiltersComponent implements OnInit, OnDestroy{
                 ...fichasF
             },
             palabraClave: this.searchControl.value || '',
+            ids: this.idsSelected
         }
 
         if(data.palabraClave !== '' || Object.keys(data.fichaFiltros).length || Object.keys(data.programaFiltros).length){
+            this.totalResultados = 0;
             this.filtroPaginated(pagina, data);
         }else{
             this.buscar = false;
@@ -278,6 +301,31 @@ export class FiltersComponent implements OnInit, OnDestroy{
                 this._changeDetectorRef.markForCheck();
             }
         );
+    }
+
+    programaSelected(event:MatCheckboxChange, idValue: any): void {
+        if(event.checked){
+            this.idsQuery[idValue] = true;
+        }else{
+            delete this.idsQuery[idValue]
+        }
+        this.ordenarIds(this.idsQuery);
+
+        let datos = JSON.stringify(this.idsQuery);
+        if(datos === '{}'){
+            datos = null;
+        }
+
+        this.router.navigate([],{relativeTo: this.activatedRoute,queryParams: { idsProgramas: datos }, queryParamsHandling: 'merge'});
+
+        this._changeDetectorRef.markForCheck();
+    }
+
+    ordenarIds(data:any){
+        this.idsSelected = [];
+        for(const [key, value] of Object.entries(data)){
+            this.idsSelected.push(key);
+        }
     }
 
     //-----------------------------------
@@ -325,7 +373,7 @@ export class FiltersComponent implements OnInit, OnDestroy{
         let image: string = '';
         if(imagen !== null){
             let result = imagen.split("html/")[1];
-            image = `http://3.147.140.118/${result}`;
+            image = `http://3.18.149.205/${result}`;
         }else{
             image = "assets/images/dashboard/thumbnail.png";
         }

@@ -6,22 +6,26 @@
         <!-- CONTENT GOES HERE -->
         <div class="min-h-100">
             <!-- Buttons -->
-            <div class="flex justify-between w-full mb-4">
+            <div class="flex justify-between w-full mb-4 gap-5">
                 <a class="sm:inline-flex" mat-button [color]="'primary'" [routerLink]="['/programas/filtro']">
                     <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:adjustments-vertical'"></mat-icon>
                     <span class="hidden sm:inline-block ml-2">Realizar búsqueda</span>
                 </a>
+                <mat-form-field class="fuse-mat-rounded fuse-mat-dense flex-auto" [subscriptSizing]="'dynamic'" >
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:magnifying-glass'" matPrefix></mat-icon>
+                    <input matInput [autocomplete]="'off'" [formControl]="searchControl" [placeholder]="'Realizar busqueda'" #searchInput>
+                </mat-form-field>
                 <button class="sm:inline-flex" mat-button [matMenuTriggerFor]="orderByMenu">
                     <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:bars-arrow-down'"></mat-icon>
-                    <span class="hidden sm:inline-block ml-2">Ordenar por: {{sortFilter}}</span>
+                    <span class="hidden sm:inline-block ml-2">Ordenar</span>
                 </button>
                 <mat-menu #orderByMenu="matMenu">
-                    <button mat-menu-item (click)="sortByOnChange('Todos')">
+                    <!-- <button mat-menu-item (click)="sortByOnChange('Todos')">
                         <span class="flex items-center">
                             <span>Todos</span>
                         </span>
-                    </button>
-                    <button mat-menu-item (click)="sortByOnChange('Mas Recientes')">
+                    </button> -->
+                    <!-- <button mat-menu-item (click)="sortByOnChange('Mas Recientes')">
                         <span class="flex items-center">
                             <span>Mas Recientes</span>
                         </span>
@@ -30,18 +34,21 @@
                         <span class="flex items-center">
                             <span>Mas Antiguos</span>
                         </span>
-                    </button>
-                    <button mat-menu-item (click)="sortByOnChange('Alfabeticamente: Ascendente')">
+                    </button> -->
+                    <button mat-menu-item (click)="sortByOnChange('Alfabeticamente: Ascendente', 'ASC')">
                         <span class="flex items-center">
                             <span>Alfabeticamente: Ascendente</span>
                         </span>
                     </button>
-                    <button mat-menu-item (click)="sortByOnChange('Alfabeticamente: Descendente')">
+                    <button mat-menu-item (click)="sortByOnChange('Alfabeticamente: Descendente', 'DESC')">
                         <span class="flex items-center">
                             <span>Alfabeticamente: Descendente</span>
                         </span>
                     </button>
                 </mat-menu>
+            </div>
+            <div class="flex justify-end w-full mb-2">
+                <p class="text-secondary font-normal">Ordenado por: {{sortFilter}}</p>
             </div>
 
             <!-- Main Content -->

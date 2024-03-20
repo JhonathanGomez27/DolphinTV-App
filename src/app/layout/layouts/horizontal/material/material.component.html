@@ -15,7 +15,7 @@
             <div class="flex items-center h-20 pt-6 px-8 mb-4">
                 <img [routerLink]="['/programas']"
                     class="w-24 cursor-pointer"
-                    src="assets/images/logo/dolphinlogo.png"
+                    src="assets/images/logo/telecafe.png"
                     alt="Logo image">
             </div>
         </ng-container>
@@ -36,19 +36,19 @@
                         <!-- Light version -->
                         <img [routerLink]="['/programas']"
                             class="w-24 dark:hidden cursor-pointer"
-                            src="assets/images/logo/dolphinlogo.png"
+                            src="assets/images/logo/telecafe.png"
                             alt="Logo image">
                         <!-- Dark version -->
                         <img [routerLink]="['/programas']"
                             class="hidden dark:flex w-24 cursor-pointer"
-                            src="assets/images/logo/dolphinlogo.png"
+                            src="assets/images/logo/telecafe.png"
                             alt="Logo image">
                     </div>
                 </ng-container>
                 <!-- Navigation toggle button -->
                 <ng-container *ngIf="isScreenSmall">
                     <div class="flex items-center mx-2">
-                        <img [routerLink]="['/programas']" class="dark:flex w-20 cursor-pointer" src="assets/images/logo/dolphinlogo.png" alt="Logo image">
+                        <img [routerLink]="['/programas']" class="dark:flex w-20 cursor-pointer" src="assets/images/logo/telecafe.png" alt="Logo image">
                     </div>
                     <!-- <button
                         mat-icon-button
@@ -58,6 +58,13 @@
                 </ng-container>
                 <!-- Components -->
                 <div class="flex items-center pl-2 ml-auto space-x-1 sm:space-x-2">
+                    <!-- Button -->
+                    <a mat-icon-button [matTooltip]="'Ir a lista de programas'" [routerLink]="['/programas']">
+                        <ng-container [ngTemplateOutlet]="defaultIconTpl"></ng-container>
+                    </a>
+                    <a mat-icon-button [matTooltip]="'Ir a filtros'" [routerLink]="['/programas/filtro']">
+                        <ng-container [ngTemplateOutlet]="defaultIconFiltro"></ng-container>
+                    </a>
                     <fuse-fullscreen class="hidden md:block"></fuse-fullscreen>
                     <user></user>
                 </div>
@@ -84,9 +91,18 @@
 
     <!-- Footer -->
     <div class="relative flex justify-center w-full z-49 print:hidden">
-        <div class="flex items-center max-w-360 w-full h-10 sm:h-12 px-6 md:px-8 sm:shadow-xl border-t bg-card dark:bg-default">
+        <div class="flex items-center max-w-360 w-full h-10 sm:h-12 px-6 md:px-8 sm:shadow-xl border-t bg-card dark:bg-default justify-between">
             <span class="font-medium text-secondary">DELPHIANALYTICS &copy; {{currentYear}}</span>
+            <img class="w-10" width="10" src="assets/images/logo/dolphinlogo.png" alt="logo delphi">
         </div>
     </div>
 
 </div>
+<!-- Default icon -->
+<ng-template #defaultIconTpl>
+    <mat-icon [svgIcon]="'heroicons_outline:home'"></mat-icon>
+</ng-template>
+<!-- Default icon -->
+<ng-template #defaultIconFiltro>
+    <mat-icon [svgIcon]="'heroicons_outline:adjustments-vertical'"></mat-icon>
+</ng-template>

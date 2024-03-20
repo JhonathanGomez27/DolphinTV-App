@@ -34,7 +34,12 @@ export const getProgramFichasResolve: ResolveFn<any> = (route: ActivatedRouteSna
        page = route.queryParamMap.get('page');
     }
 
-    return inject(HomeProgramService).getFichasPrograma(programa, year, page);
+    let data: any = {palabraClave: ''};
+    if(route.queryParamMap.has('busqueda')){
+        data.palabraClave = route.queryParamMap.get('busqueda') || '';
+    }
+
+    return inject(HomeProgramService).getFichasPrograma(programa, year, page, data);
 }
 
 export const getFichaDataResolve: ResolveFn<any> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {

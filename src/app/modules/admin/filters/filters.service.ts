@@ -16,6 +16,7 @@ export class FiltersService {
     // variables datos
     private _resultados:  BehaviorSubject<any | null> = new BehaviorSubject(null);
     private _programa:  BehaviorSubject<any | null> = new BehaviorSubject(null);
+    private _programas:  BehaviorSubject<any | null> = new BehaviorSubject(null);
     private _filtroResultado:  BehaviorSubject<any | null> = new BehaviorSubject(null);
     private _ficha:  BehaviorSubject<any | null> = new BehaviorSubject(null);
     private _subtitulos:  BehaviorSubject<any | null> = new BehaviorSubject(null);
@@ -30,6 +31,14 @@ export class FiltersService {
 
     get programa(): Observable<any>{
         return this._programa.asObservable();
+    }
+
+    set programas(data: any){
+        this._programas.next(data);
+    }
+
+    get programas(): Observable<any>{
+        return this._programas.asObservable();
     }
 
     set filtroResultado(data: any){
@@ -62,6 +71,20 @@ export class FiltersService {
 
     get subtitulos(): Observable<string>{
         return this._subtitulos.asObservable();
+    }
+
+    getProgramas(page: any): Observable<any> {
+        let params = new HttpParams();
+        params = params.set('page', page);
+        params = params.set('limit', this.limit);
+        params = params.set('orden', 'ASC');
+
+        return this._httpClient.get(`${this.url}programas/paginados`, {params}).pipe(
+            tap((response) => {
+                // console.log(response);
+                this._programas.next(response);
+            })
+        );
     }
 
     getDatosFiltroPrograma(page: any, datos:any): Observable<any> {

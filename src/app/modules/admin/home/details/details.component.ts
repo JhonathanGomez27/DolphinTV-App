@@ -49,6 +49,9 @@ export class DetailsProgramComponent implements OnInit, OnDestroy{
     ngOnInit(): void {
         this._programaService.yearSelected.pipe(takeUntil(this._unsubscribeAll)).subscribe((value) => {
             setTimeout(() => {
+                if(value === 'undefined'){
+                    value = 'Sin fecha'
+                }
                 this.yearSelected = value;
                 this._year.next('s');
             }, 200);
@@ -60,7 +63,7 @@ export class DetailsProgramComponent implements OnInit, OnDestroy{
             if(response.programa.imagen !== null && response.programa.imagen !== ''){
                 let path = response.programa.imagen;
                 let result = path.split("html/")[1];
-                this.image = `http://3.147.140.118/${result}`;
+                this.image = `http://3.18.149.205/${result}`;
             }else{
                 this.image = "assets/images/dashboard/thumbnail.png";
             }
