@@ -48,7 +48,7 @@ export class HomeProgramService {
         this._programas.next(data);
     }
 
-    get programas(): Observable<string>{
+    get programas(): Observable<any>{
         return this._programas.asObservable();
     }
 
@@ -56,7 +56,7 @@ export class HomeProgramService {
         this._programa.next(data);
     }
 
-    get programa(): Observable<string>{
+    get programa(): Observable<any>{
         return this._programa.asObservable();
     }
 
@@ -64,11 +64,11 @@ export class HomeProgramService {
         this._fichas.next(data);
     }
 
-    get fichas(): Observable<string>{
+    get fichas(): Observable<any>{
         return this._fichas.asObservable();
     }
 
-    get ficha(): Observable<string>{
+    get ficha(): Observable<any>{
         return this._ficha.asObservable();
     }
 
@@ -76,7 +76,7 @@ export class HomeProgramService {
         this._subtitulos.next(values);
     }
 
-    get subtitulos(): Observable<string>{
+    get subtitulos(): Observable<any>{
         return this._subtitulos.asObservable();
     }
 
@@ -188,5 +188,10 @@ export class HomeProgramService {
         params = params.set('limit', this.limit);
 
         return this._httpClient.post(`${this.url}fichas/buscar/${ficha}`, datos, {params})
+    }
+
+    getSubTitulosFichaAll(ficha: any): Observable<any> {
+
+        return this._httpClient.get(`${this.url}fichas/subtitulos/${ficha}`);
     }
 }

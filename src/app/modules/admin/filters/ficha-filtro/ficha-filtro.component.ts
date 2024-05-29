@@ -12,6 +12,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { query } from '@angular/animations';
 import { environment } from 'environments/environment';
 import { SanitizedHtmlPipe } from '../../pipes/sanitizedPipe.pipe';
+import Swal from 'sweetalert2';
+import { ExcelService } from '../../xlsx.service';
 
 @Component({
     selector: 'app-ficha-filtro',
@@ -56,13 +58,27 @@ export class FichaFiltroComponent implements OnInit, OnDestroy{
     limit: any = environment.pagination;
 
     totalPages: any = 0;
-
+    disableSubtitulos: boolean = false;
+    Toast:any;
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private _filtersService: FiltersService,
-        private _changeDetectorRef: ChangeDetectorRef
-    ) { }
+        private _changeDetectorRef: ChangeDetectorRef,
+        private _xlsxService: ExcelService
+    ) {
+        this.Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            },
+        });
+     }
 
     ngOnInit() {
         this.myScriptElement = document.getElementById("myVideo") as HTMLMediaElement;
@@ -268,5 +284,23 @@ export class FichaFiltroComponent implements OnInit, OnDestroy{
         const regEx = new RegExp(searchValue, "ig");
         const temp =  value.replace(regEx, `<strong class="font-bold text-primary">${searchValue}</strong>`);
         return temp;
+    }
+
+    obtenerSubtitulosDescargar(){
+        this.disableSubtitulos = true;
+        this._filtersService.getSubTitulosFichaAll(this.ficha.clavePrincipal).pipe(takeUntil(this._unsubscribeAll)).subscribe(
+            (response:any) => {
+                this._xlsxService.exportAsExcelFile(response, this.ficha.codigoArchivo);
+                this.Toast.fire({
+                    icon: 'success',
+                    title: 'Subtitulos guardados con exito'
+                });
+                this.disableSubtitulos = false;
+                this._changeDetectorRef.markForCheck();
+            },(error) => {
+                this.disableSubtitulos = false;
+                this._changeDetectorRef.markForCheck();
+            }
+        );
     }
 }

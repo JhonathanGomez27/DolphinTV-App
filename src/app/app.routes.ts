@@ -10,14 +10,14 @@ import { LayoutComponent } from 'app/layout/layout.component';
 export const appRoutes: Route[] = [
 
     // Redirect empty path to '/programas'
-    {path: '', pathMatch : 'full', redirectTo: 'programas'},
+    {path: '', pathMatch : 'full', redirectTo: 'home'},
 
-    // Redirect signed-in user to the '/programas'
+    // Redirect signed-in user to the '/home'
     //
     // After the user signs in, the sign-in page will redirect the user to the 'signed-in-redirect'
     // path. Below is another redirection for that path to redirect the user to the desired
     // location. This is a small convenience to keep all main routes together here on this file.
-    {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'programas'},
+    {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'home'},
 
     // Auth routes for guests
     {
@@ -75,6 +75,7 @@ export const appRoutes: Route[] = [
         },
         children: [
             {path: 'programas', loadChildren: () => import('app/modules/admin/home/home.routes')},
+            {path: 'home', loadChildren: () => import('app/modules/admin/dashboard/dashboard.routes')},
             {path: '**', redirectTo: 'programas'}
         ]
     }

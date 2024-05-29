@@ -12,6 +12,8 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { SanitizedHtmlPipe } from '../../pipes/sanitizedPipe.pipe';
+import Swal from 'sweetalert2';
+import { ExcelService } from '../../xlsx.service';
 
 @Component({
   selector: 'app-program-info',
@@ -56,12 +58,15 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
 
     totalPages: any = 0;
 
+    disableSubtitulos: boolean = false;
+    Toast:any;
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private _programService: HomeProgramService,
         private _changeDetectorRef: ChangeDetectorRef,
-        private httpCliente: HttpClient
+        private httpCliente: HttpClient,
+        private _xlsxService: ExcelService
     ){
         this.activatedRoute.params.subscribe((params) => {
             this.routeBack = `/programas/ver/${params.programa}/${params.year}`;
@@ -69,6 +74,18 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
             this.year = params.year;
             // this._programService.routeBack = `/programas/ver/${params.programa}/${params.year}`;
         })
+
+        this.Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            },
+        });
     }
 
     ngOnInit(): void {
@@ -221,20 +238,20 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
         this.myScriptElement.play();
     }
 
-    fileExists(url: string): Observable<boolean> {
-        // let headers = new HttpHeaders();
-        // headers = headers.set('Access-Control-Allow-Origin', '*');
-        // headers = headers.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        // headers = headers.set('Accept', '*/*');
-        return this.httpCliente.get(url, {responseType: 'text'})
-            .pipe(map(response => {
-                    return true;
-                }),
-                catchError(error => {
-                    return of(false);
-                })
-            );
-    }
+    // fileExists(url: string): Observable<boolean> {
+    //     // let headers = new HttpHeaders();
+    //     // headers = headers.set('Access-Control-Allow-Origin', '*');
+    //     // headers = headers.set("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    //     // headers = headers.set('Accept', '*/*');
+    //     return this.httpCliente.get(url, {responseType: 'text'})
+    //         .pipe(map(response => {
+    //                 return true;
+    //             }),
+    //             catchError(error => {
+    //                 return of(false);
+    //             })
+    //         );
+    // }
 
     descargarFile(){
     }
@@ -303,6 +320,24 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
         const regEx = new RegExp(searchValue, "ig");
         const temp =  value.replace(regEx, `<strong class="font-bold text-black">${searchValue}</strong>`);
         return temp;
+    }
+
+    obtenerSubtitulosDescargar(){
+        this.disableSubtitulos = true;
+        this._programService.getSubTitulosFichaAll(this.ficha.clavePrincipal).pipe(takeUntil(this._unsubscribeAll)).subscribe(
+            (response:any) => {
+                this._xlsxService.exportAsExcelFile(response, this.ficha.codigoArchivo);
+                this.Toast.fire({
+                    icon: 'success',
+                    title: 'Subtitulos guardados con exito'
+                });
+                this.disableSubtitulos = false;
+                this._changeDetectorRef.markForCheck();
+            },(error) => {
+                this.disableSubtitulos = false;
+                this._changeDetectorRef.markForCheck();
+            }
+        );
     }
 
     // trans(){

@@ -49,9 +49,9 @@ export class ListComponent implements OnInit, OnDestroy {
         this.activatedRoute.queryParams.subscribe(params => {
                 if(!params.page){
                     this.router.navigate([],{relativeTo: this.activatedRoute,queryParams: { page: '1' }});
-                    this.page = 1;
+                    this.page = 0;
                 }else{
-                    this.page = params.page;
+                    this.page = parseInt(params.page) - 1;
                 }
                 this._changeDetector.markForCheck();
             }

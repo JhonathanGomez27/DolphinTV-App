@@ -1,0 +1,25 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto" cdkScrollable>
+
+    <!-- Main -->
+    <div class="flex-auto  p-6 sm:p-10 bg-card background-stilo">
+
+        <!-- CONTENT GOES HERE -->
+        <div class="grid grid-cols-1 md:grid-cols-2 h-full">
+            <div class="col-span-1 flex justify-center items-center">
+                <div class="flex flex-col w-full h-full justify-center items-start p-8">
+                    <h1 class="text-lg font-semibold text-primary text-justify">Bienvenido a la aplicación de búsqueda dinámica y profunda de Telecafé. Con nuestra herramienta innovadora, podrás explorar el vasto contenido televisivo de Telecafé utilizando múltiples parámetros de búsqueda. Desde programas, temas, hasta invitados especiales, nuestra aplicación te proporcionará resultados de manera rápida y precisa. ¿Quieres encontrar ese momento específico en tu programa favorito? No hay problema. Con solo unos pocos clics, podrás visualizar el minuto y segundo exacto en el que se encuentra tu búsqueda. Sumérgete en el mundo de Telecafé con nuestra poderosa herramienta de búsqueda.</h1>
+                    <h2 class="m-4"></h2>
+                    <a href="#" class="bg-transparent hover:bg-primary text-primary hover:text-white rounded shadow hover:shadow-lg py-2 px-4 border border-primary font-bold text-lg" [routerLink]="['/programas']">Ver programas</a>
+                </div>
+            </div>
+            <div class="col-span-1 flex justify-center items-center">
+                <div class="grid grid-cols-6 col-span-2 gap-2">
+                    <a class="overflow-hidden rounded-xl max-h-[10rem] col-span-2" *ngFor="let programa of programas; let index = i"  [routerLink]="['/programas']">
+                        <img class="h-full w-full object-cover " [src]="getImgRoute(programa.imagen)">
+                    </a>
+                  </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -168,4 +168,9 @@ export class FiltersService {
 
         return this._httpClient.post(`${this.url}fichas/buscar/${ficha}`, datos, {params})
     }
+
+    getSubTitulosFichaAll(ficha: any): Observable<any> {
+
+        return this._httpClient.get(`${this.url}fichas/subtitulos/${ficha}`);
+    }
 }
