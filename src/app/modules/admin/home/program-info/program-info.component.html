@@ -17,7 +17,7 @@
                     <mat-icon
                         class="icon-size-5 text-secondary"
                         [svgIcon]="'heroicons_mini:chevron-right'"></mat-icon>
-                    <a class="ml-1 text-primary-500" [routerLink]="['/programas/ver', params.programa, params.year]" queryParamsHandling="merge">{{params.year}}</a>
+                    <a class="ml-1 text-primary-500" [routerLink]="['/programas/ver', params.programa, params.year]" queryParamsHandling="merge">{{params.year !== 'undefined'? params.year: 'Sin fecha'}}</a>
                 </div>
                 <div class="flex items-center ml-1 whitespace-nowrap">
                     <mat-icon
@@ -51,6 +51,10 @@
                 <h1 class="text-2xl font-bold text-black tracking-wide">{{programa.titulo}} - {{ficha.duracion}}</h1>
                 <!-- <h1 class="text-lg font-bold text-secondary tracking-wide">{{ficha.nombreArchivo}}</h1> -->
                 <h2 class="text-xl font-semibold tracking-wide text-zinc-500">{{ficha.fechaEmision}}</h2>
+
+                <div class="w-full flex justify-end">
+                    <button mat-flat-button [color]="'primary'" (click)="abrirModalCreditos()">Sinopsis...</button>
+                </div>
             </div>
             <!-- tags -->
             <div class="mt-2 w-full">
@@ -83,6 +87,16 @@
                         <!-- <h3 class="text-secondary">000Mb</h3> -->
                     </div>
                 </a>
+            </div>
+
+            <!-- Creditos -->
+            <div class="w-full mt-3">
+                <h1 class="text-xl text-zinc-500 font-semibold">Créditos</h1>
+                <div class="flex flex-wrap flex-row gap-2 w-full">
+                    <ng-container *ngFor="let item of creditos; last as islast">
+                        <h2 class="text-base font-semibold">{{item.cargo}}: <span class="text-secondary">{{item.persona}}</span> <span *ngIf="!islast">, &nbsp; </span></h2>
+                    </ng-container>
+                </div>
             </div>
         </div>
 

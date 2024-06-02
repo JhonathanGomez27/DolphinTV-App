@@ -20,7 +20,7 @@ export class FiltersService {
     private _filtroResultado:  BehaviorSubject<any | null> = new BehaviorSubject(null);
     private _ficha:  BehaviorSubject<any | null> = new BehaviorSubject(null);
     private _subtitulos:  BehaviorSubject<any | null> = new BehaviorSubject(null);
-
+    private _creditos:  BehaviorSubject<any | null> = new BehaviorSubject(null);
     //-----------------------------------
     // Getter and setter
     //-----------------------------------
@@ -71,6 +71,10 @@ export class FiltersService {
 
     get subtitulos(): Observable<string>{
         return this._subtitulos.asObservable();
+    }
+
+    get creditos(): Observable<any>{
+        return this._creditos.asObservable();
     }
 
     getProgramas(page: any): Observable<any> {
@@ -172,5 +176,13 @@ export class FiltersService {
     getSubTitulosFichaAll(ficha: any): Observable<any> {
 
         return this._httpClient.get(`${this.url}fichas/subtitulos/${ficha}`);
+    }
+
+    getCreditosFicha(ficha: any): Observable<any> {
+        return this._httpClient.get(`${this.url}fichas/creditos/${ficha}`).pipe(
+            tap((response) => {
+                this._creditos.next(response);
+            })
+        );
     }
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Subject, debounceTime, takeUntil } from 'rxjs';
@@ -14,6 +14,8 @@ import { environment } from 'environments/environment';
 import { SanitizedHtmlPipe } from '../../pipes/sanitizedPipe.pipe';
 import Swal from 'sweetalert2';
 import { ExcelService } from '../../xlsx.service';
+import { VerSinopsisModalComponent } from './modals/ver-sinopsis-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-ficha-filtro',
@@ -22,7 +24,7 @@ import { ExcelService } from '../../xlsx.service';
     imports: [CommonModule, RouterOutlet, RouterLink, MatPaginatorModule, MatFormFieldModule, MatInputModule, FormsModule, MatIconModule, MatButtonModule, ReactiveFormsModule, SanitizedHtmlPipe],
 })
 
-export class FichaFiltroComponent implements OnInit, OnDestroy{
+export class FichaFiltroComponent implements OnInit, OnDestroy, AfterViewInit{
 
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -60,12 +62,14 @@ export class FichaFiltroComponent implements OnInit, OnDestroy{
     totalPages: any = 0;
     disableSubtitulos: boolean = false;
     Toast:any;
+
+    creditos: any = [];
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private _filtersService: FiltersService,
         private _changeDetectorRef: ChangeDetectorRef,
-        private _xlsxService: ExcelService
+        private _xlsxService: ExcelService, public dialog: MatDialog
     ) {
         this.Toast = Swal.mixin({
             toast: true,
@@ -137,8 +141,21 @@ export class FichaFiltroComponent implements OnInit, OnDestroy{
             }
          });
 
+        this._filtersService.creditos.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
+            this.creditos = response;
+            this._changeDetectorRef.markForCheck();
+        });
 
-         this.myScriptElement.ontimeupdate  = () => {
+
+        //  this.myScriptElement.ontimeupdate  = () => {
+        //     this.checkSubtitles();
+        // }
+
+
+    }
+
+    ngAfterViewInit(): void {
+        this.myScriptElement.ontimeupdate  = () => {
             this.checkSubtitles();
         }
     }
@@ -220,6 +237,11 @@ export class FichaFiltroComponent implements OnInit, OnDestroy{
     }
 
     checkSubtitles(){
+
+        if(this.subtitulos.length === 0){
+            return;
+        }
+
         if(this.loading){
             return;
         }
@@ -302,5 +324,17 @@ export class FichaFiltroComponent implements OnInit, OnDestroy{
                 this._changeDetectorRef.markForCheck();
             }
         );
+    }
+
+    //-----------------------------------
+    // modal
+    //-----------------------------------
+    abrirModalSinopsis(){
+        const dialogRef = this.dialog.open(VerSinopsisModalComponent, {
+            data: {creditos: this.creditos, nombreFicha: this.ficha.codigoArchivo, sinopsis: this.ficha.sinopsis},
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+        });
     }
 }

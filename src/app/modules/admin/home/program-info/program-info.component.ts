@@ -14,6 +14,8 @@ import { environment } from 'environments/environment';
 import { SanitizedHtmlPipe } from '../../pipes/sanitizedPipe.pipe';
 import Swal from 'sweetalert2';
 import { ExcelService } from '../../xlsx.service';
+import { MatDialog } from '@angular/material/dialog';
+import { VerCreditosModalComponent } from '../modals/ver-creditos-modal/ver-creditos-modal.component';
 
 @Component({
   selector: 'app-program-info',
@@ -60,13 +62,15 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
 
     disableSubtitulos: boolean = false;
     Toast:any;
+
+    creditos: any = [];
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private _programService: HomeProgramService,
         private _changeDetectorRef: ChangeDetectorRef,
         private httpCliente: HttpClient,
-        private _xlsxService: ExcelService
+        private _xlsxService: ExcelService, public dialog: MatDialog
     ){
         this.activatedRoute.params.subscribe((params) => {
             this.routeBack = `/programas/ver/${params.programa}/${params.year}`;
@@ -159,6 +163,11 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
 
         //     this._changeDetectorRef.markForCheck();
         // })
+
+        this._programService.creditos.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
+            this.creditos = response;
+            this._changeDetectorRef.markForCheck();
+        });
     }
 
     ngAfterViewInit(): void {
@@ -257,6 +266,11 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
     }
 
     checkSubtitles(){
+
+        if(this.subtitulos.length === 0){
+            return;
+        }
+
         if(this.loading){
             return;
         }
@@ -338,6 +352,18 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
                 this._changeDetectorRef.markForCheck();
             }
         );
+    }
+
+    //-----------------------------------
+    // Modales
+    //-----------------------------------
+    abrirModalCreditos(){
+        const dialogRef = this.dialog.open(VerCreditosModalComponent, {
+            data: {creditos: this.creditos, nombreFicha: this.ficha.codigoArchivo, sinopsis: this.ficha.sinopsis},
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+        });
     }
 
     // trans(){

@@ -78,3 +78,12 @@ export const getSubtituloFilter: ResolveFn<any> = (route: ActivatedRouteSnapshot
 export const getProgramsFilterResolve: ResolveFn<any> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
     return inject(FiltersService).getProgramas(1);
 }
+
+export const getCreditosFichaFilter: ResolveFn<any> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+    let ficha:any = '';
+    if(route.paramMap.has('ficha')){
+       ficha = route.paramMap.get('ficha');
+    }
+
+    return inject(FiltersService).getCreditosFicha(ficha);
+}

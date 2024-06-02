@@ -23,6 +23,7 @@ export class HomeProgramService {
     private _fichas:  BehaviorSubject<any | null> = new BehaviorSubject(null);
     private _ficha:  BehaviorSubject<any | null> = new BehaviorSubject(null);
     private _subtitulos:  BehaviorSubject<any | null> = new BehaviorSubject(null);
+    private _creditos:  BehaviorSubject<any | null> = new BehaviorSubject(null);
 
     //-----------------------------------
     // Getter and setter
@@ -64,6 +65,10 @@ export class HomeProgramService {
         this._fichas.next(data);
     }
 
+    set creditos(data: any){
+        this._creditos.next(data);
+    }
+
     get fichas(): Observable<any>{
         return this._fichas.asObservable();
     }
@@ -78,6 +83,10 @@ export class HomeProgramService {
 
     get subtitulos(): Observable<any>{
         return this._subtitulos.asObservable();
+    }
+
+    get creditos(): Observable<any>{
+        return this._creditos.asObservable();
     }
 
     //-----------------------------------
@@ -193,5 +202,14 @@ export class HomeProgramService {
     getSubTitulosFichaAll(ficha: any): Observable<any> {
 
         return this._httpClient.get(`${this.url}fichas/subtitulos/${ficha}`);
+    }
+
+
+    getCreditosFicha(ficha: any): Observable<any> {
+        return this._httpClient.get(`${this.url}fichas/creditos/${ficha}`).pipe(
+            tap((response) => {
+                this._creditos.next(response);
+            })
+        );
     }
 }

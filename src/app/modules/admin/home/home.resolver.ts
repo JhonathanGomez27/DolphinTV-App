@@ -64,3 +64,12 @@ export const getSubtituloFilterProgram: ResolveFn<any> = (route: ActivatedRouteS
 
     return inject(HomeProgramService).getSubTitulosFicha(1, ficha, data);
 }
+
+export const getCreditosFicha: ResolveFn<any> = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+    let ficha:any = '';
+    if(route.paramMap.has('chapter')){
+       ficha = route.paramMap.get('chapter');
+    }
+
+    return inject(HomeProgramService).getCreditosFicha(ficha);
+}

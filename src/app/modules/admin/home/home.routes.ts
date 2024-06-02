@@ -7,8 +7,8 @@ import { DetailsProgramComponent } from './details/details.component';
 import { ProgramYearsComponent } from './details/program-years/program-years.component';
 import { YearInfoComponent } from './details/year-info/year-info.component';
 import { ProgramInfoComponent } from './program-info/program-info.component';
-import { getFichaDataResolve, getProgramDataResolve, getProgramFichasResolve, getProgramsResolve, getSubtituloFilterProgram } from './home.resolver';
-import { getFichaFilter, getFiltroByProgramaResolve, getProgramaByIdResolve, getProgramsFilterResolve, getSubtituloFilter } from '../filters/filters.resolver';
+import { getCreditosFicha, getFichaDataResolve, getProgramDataResolve, getProgramFichasResolve, getProgramsResolve, getSubtituloFilterProgram } from './home.resolver';
+import { getCreditosFichaFilter, getFichaFilter, getFiltroByProgramaResolve, getProgramaByIdResolve, getProgramsFilterResolve, getSubtituloFilter } from '../filters/filters.resolver';
 import { FichaFiltroComponent } from '../filters/ficha-filtro/ficha-filtro.component';
 
 export default [
@@ -51,6 +51,7 @@ export default [
                     ficha: getFichaDataResolve,
                     subtitulosFichaP: getSubtituloFilterProgram,
                     data: getProgramDataResolve,
+                    creditos: getCreditosFicha
                 }
             },
             {
@@ -74,7 +75,8 @@ export default [
                 resolve:{
                     fichaInfo: getFichaFilter,
                     subtitulosFicha: getSubtituloFilter,
-                    programa: getProgramaByIdResolve
+                    programa: getProgramaByIdResolve,
+                    creditos: getCreditosFichaFilter
                 }
             }
         ]
