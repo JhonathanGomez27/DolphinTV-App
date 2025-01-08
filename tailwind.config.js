@@ -11,7 +11,8 @@ const generatePalette = require(path.resolve(__dirname, ('src/@fuse/tailwind/uti
  */
 const customPalettes = {
     brand: generatePalette('#2196F3'),
-    telecafe: generatePalette('#2c3615')
+    telecafe: generatePalette('#2c3615'),
+    canaltrece: generatePalette('#ff9101')
 };
 
 /**
@@ -39,7 +40,7 @@ const themes = {
     // Rest of the themes will use the 'default' as the base
     // theme and will extend it with their given configuration.
     'brand' : {
-        primary: customPalettes.telecafe
+        primary: customPalettes.canaltrece
     },
     'teal'  : {
         primary: {

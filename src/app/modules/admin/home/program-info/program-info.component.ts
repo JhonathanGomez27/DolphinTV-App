@@ -124,7 +124,8 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
                 this.setCurTimePaginated();
             }
 
-            this.videoUrl = `http://3.18.149.205/assets/videos/${this.ficha.id_programa}/${this.year}/${this.ficha.nombreArchivo}`;
+            const timestamp = new Date().getTime();
+            this.videoUrl = `http://3.18.149.205/assets/videos/${this.ficha.id_programa}/${this.year}/${this.ficha.nombreArchivo}?v=${timestamp}`;
             this._changeDetectorRef.markForCheck();
         });
 

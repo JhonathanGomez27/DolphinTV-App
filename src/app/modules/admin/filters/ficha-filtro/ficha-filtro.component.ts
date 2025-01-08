@@ -107,7 +107,9 @@ export class FichaFiltroComponent implements OnInit, OnDestroy, AfterViewInit{
                 anio = this.ficha.fechaEmision.split('/')[2];
             }
 
-            this.videoUrl = `http://3.18.149.205/assets/videos/${this.ficha.id_programa}/${anio}/${this.ficha.nombreArchivo}`;
+            const timestamp = new Date().getTime();
+
+            this.videoUrl = `http://3.18.149.205/assets/videos/${this.ficha.id_programa}/${anio}/${this.ficha.nombreArchivo}?v=${timestamp}`;
             this._changeDetectorRef.markForCheck();
 
             this._changeDetectorRef.markForCheck();
