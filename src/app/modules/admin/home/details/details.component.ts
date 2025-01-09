@@ -7,6 +7,7 @@ import { BehaviorSubject, Subject, combineLatest, takeUntil } from 'rxjs';
 import { HomeProgramService } from '../home.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import Swal from 'sweetalert2';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-program-details',
@@ -26,6 +27,7 @@ export class DetailsProgramComponent implements OnInit, OnDestroy{
     Toast: any;
 
     image: string = '';
+    urlImagenes: string = environment.urlImages;
 
     constructor(
         private route: ActivatedRoute,
@@ -62,8 +64,12 @@ export class DetailsProgramComponent implements OnInit, OnDestroy{
             this.programData = response.programa;
             if(response.programa.imagen !== null && response.programa.imagen !== ''){
                 let path = response.programa.imagen;
-                let result = path.split("html/")[1];
-                this.image = `http://3.18.149.205/${result}`;
+                if(!path.includes('https://')){
+                    let result = path.split("html/")[1];
+                    this.image = `${this.urlImagenes}/${result}`;
+                }else{
+                    this.image = path;
+                }
             }else{
                 this.image = "assets/images/dashboard/thumbnail.png";
             }

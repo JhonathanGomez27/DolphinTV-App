@@ -12,7 +12,8 @@ const generatePalette = require(path.resolve(__dirname, ('src/@fuse/tailwind/uti
 const customPalettes = {
     brand: generatePalette('#2196F3'),
     telecafe: generatePalette('#2c3615'),
-    canaltrece: generatePalette('#ff9101')
+    canaltrece: generatePalette('#ff9101'),
+    ccbm: generatePalette('#03082b'),
 };
 
 /**
@@ -40,7 +41,7 @@ const themes = {
     // Rest of the themes will use the 'default' as the base
     // theme and will extend it with their given configuration.
     'brand' : {
-        primary: customPalettes.canaltrece
+        primary: customPalettes.ccbm
     },
     'teal'  : {
         primary: {
@@ -98,7 +99,8 @@ const config = {
                 'spin-slow': 'spin 3s linear infinite'
             },
             colors                  : {
-                gray: colors.slate
+                gray: colors.slate,
+                'secondary-ccbm': '#ffd15c'
             },
             flex                    : {
                 '0': '0 0 auto'

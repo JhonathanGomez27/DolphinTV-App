@@ -3,13 +3,14 @@ import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 import { DashboardServiceComponent } from './dashboard.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
-  imports: [CommonModule, NgIf, NgFor, RouterLink,],
+  imports: [CommonModule, NgFor, RouterLink,],
 })
 export class DashboardComponent implements OnInit, OnDestroy{
 
@@ -19,6 +20,8 @@ export class DashboardComponent implements OnInit, OnDestroy{
     page: any = 0;
 
     programas: any = [];
+    urlImagenes: string = environment.urlImages;
+
 
     constructor(
         private router: Router,
@@ -54,9 +57,14 @@ export class DashboardComponent implements OnInit, OnDestroy{
 
     getImgRoute(imagen: any): string{
         let image: string = '';
+
         if(imagen !== null){
-            let result = imagen.split("html/")[1];
-            image = `http://3.18.149.205/${result}`;
+            if(imagen.includes('https://')){
+                image = imagen;
+            }else{
+                let result = imagen.split("html/")[1];
+                image = `${this.urlImagenes}/${result}`;
+            }
         }else{
             image = "assets/images/dashboard/thumbnail.png";
         }

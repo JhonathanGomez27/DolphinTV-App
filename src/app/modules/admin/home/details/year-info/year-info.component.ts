@@ -15,7 +15,7 @@ import { MatMenuModule } from '@angular/material/menu';
   selector: 'app-year-info',
   standalone: true,
   templateUrl: './year-info.component.html',
-  imports: [CommonModule, RouterOutlet, RouterLink, MatPaginatorModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatIconModule, MatMenuModule],
+  imports: [CommonModule, RouterLink, MatPaginatorModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatIconModule, MatMenuModule],
 })
 export class YearInfoComponent implements OnInit{
 
@@ -42,6 +42,8 @@ export class YearInfoComponent implements OnInit{
     loading: boolean = false;
 
     initial:string = 'init';
+    urlImagenes: string = environment.urlImages;
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private _programService: HomeProgramService,
@@ -78,9 +80,18 @@ export class YearInfoComponent implements OnInit{
         this._programService.programa.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
             this.programa = response.programa;
             if(response.programa.imagen !== null && response.programa.imagen !== ''){
+                // let path = response.programa.imagen;
+
+                // let result = path.split("html/")[1];
+                // this.image = `${this.urlImagenes}/${result}`;
+
                 let path = response.programa.imagen;
-                let result = path.split("html/")[1];
-                this.image = `http://3.18.149.205/${result}`;
+                if(!path.includes('https://')){
+                    let result = path.split("html/")[1];
+                    this.image = `${this.urlImagenes}/${result}`;
+                }else{
+                    this.image = path;
+                }
             }else{
                 this.image = "assets/images/dashboard/thumbnail.png";
             }

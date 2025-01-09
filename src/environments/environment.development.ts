@@ -1,8 +1,8 @@
 export const environment = {
-    urlAuth: 'http://127.0.0.1:3000/delphi/authentication/',
-    url: 'http://127.0.0.1:3000/delphi/',
-    // urlAuth: 'http://3.18.149.205:3000/delphi/authentication/',
-    // url: 'http://3.18.149.205:3000/delphi/',
+    urlAuth: 'http://100.29.133.0:4000/api/authentication/',
+    url: 'http://100.29.133.0:4000/api/',
+    urlImages: 'http://100.29.133.0',
+
     pagination: 20,
     production: true
 };

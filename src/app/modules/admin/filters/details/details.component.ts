@@ -7,12 +7,13 @@ import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/route
 import { FiltersService } from '../filters.service';
 import { Subject, takeUntil } from 'rxjs';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-details',
   standalone: true,
   templateUrl: './details.component.html',
-  imports: [CommonModule, MatButtonModule, MatIconModule, RouterOutlet, RouterLink, TitleCasePipe, MatPaginatorModule],
+  imports: [CommonModule, MatButtonModule, MatIconModule, RouterLink, TitleCasePipe, MatPaginatorModule],
 })
 export class DetailsComponent implements OnInit, OnDestroy{
 
@@ -28,6 +29,8 @@ export class DetailsComponent implements OnInit, OnDestroy{
     params: any = {};
 
     loading: boolean = false;
+    urlImagenes: string = environment.urlImages;
+
 
     constructor(
         private location: Location,
@@ -112,9 +115,14 @@ export class DetailsComponent implements OnInit, OnDestroy{
 
     getImgRoute(imagen: any): string{
         let image: string = '';
+
         if(imagen !== null){
-            let result = imagen.split("html/")[1];
-            image = `http://3.18.149.205/${result}`;
+            if(imagen.includes('https://')){
+                image = imagen;
+            }else{
+                let result = imagen.split("html/")[1];
+                image = `${this.urlImagenes}/${result}`;
+            }
         }else{
             image = "assets/images/dashboard/thumbnail.png";
         }

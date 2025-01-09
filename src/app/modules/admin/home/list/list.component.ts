@@ -11,13 +11,14 @@ import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-list',
   standalone: true,
   templateUrl: './list.component.html',
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule, MatCheckboxModule, FuseDrawerComponent, RouterOutlet, RouterLink, NgIf, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule, MatCheckboxModule, RouterLink, NgIf, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule],
 })
 export class ListComponent implements OnInit, OnDestroy {
 
@@ -35,6 +36,8 @@ export class ListComponent implements OnInit, OnDestroy {
     searchControl: UntypedFormControl = new UntypedFormControl();
 
     loading: boolean = false;
+
+    urlImagenes: string = environment.urlImages;
 
     constructor(
         private router: Router,
@@ -86,8 +89,12 @@ export class ListComponent implements OnInit, OnDestroy {
     getImgRoute(imagen: any): string{
         let image: string = '';
         if(imagen !== null){
-            let result = imagen.split("html/")[1];
-            image = `http://3.18.149.205/${result}`;
+            if(imagen.includes('https://')){
+                image = imagen;
+            }else{
+                let result = imagen.split("html/")[1];
+                image = `${this.urlImagenes}/${result}`;
+            }
         }else{
             image = "assets/images/dashboard/thumbnail.png";
         }

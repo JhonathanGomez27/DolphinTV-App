@@ -21,7 +21,7 @@ import { MatDialog } from '@angular/material/dialog';
     selector: 'app-ficha-filtro',
     templateUrl: 'ficha-filtro.component.html',
     standalone: true,
-    imports: [CommonModule, RouterOutlet, RouterLink, MatPaginatorModule, MatFormFieldModule, MatInputModule, FormsModule, MatIconModule, MatButtonModule, ReactiveFormsModule, SanitizedHtmlPipe],
+    imports: [CommonModule, RouterLink, MatPaginatorModule, MatFormFieldModule, MatInputModule, FormsModule, MatIconModule, MatButtonModule, ReactiveFormsModule, SanitizedHtmlPipe],
 })
 
 export class FichaFiltroComponent implements OnInit, OnDestroy, AfterViewInit{
@@ -64,6 +64,9 @@ export class FichaFiltroComponent implements OnInit, OnDestroy, AfterViewInit{
     Toast:any;
 
     creditos: any = [];
+
+    urlImagenes: string = environment.urlImages;
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -109,7 +112,7 @@ export class FichaFiltroComponent implements OnInit, OnDestroy, AfterViewInit{
 
             const timestamp = new Date().getTime();
 
-            this.videoUrl = `http://3.18.149.205/assets/videos/${this.ficha.id_programa}/${anio}/${this.ficha.nombreArchivo}?v=${timestamp}`;
+            this.videoUrl = `${this.urlImagenes}/assets/videos/${this.ficha.id_programa}/${anio}/${this.ficha.nombreArchivo}?v=${timestamp}`;
             this._changeDetectorRef.markForCheck();
 
             this._changeDetectorRef.markForCheck();

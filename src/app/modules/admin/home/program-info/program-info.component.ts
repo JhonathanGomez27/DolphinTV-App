@@ -64,6 +64,9 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
     Toast:any;
 
     creditos: any = [];
+
+    urlImagenes: string = environment.urlImages;
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -125,7 +128,7 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
             }
 
             const timestamp = new Date().getTime();
-            this.videoUrl = `http://3.18.149.205/assets/videos/${this.ficha.id_programa}/${this.year}/${this.ficha.nombreArchivo}?v=${timestamp}`;
+            this.videoUrl = `${this.urlImagenes}/assets/videos/${this.ficha.id_programa}/${this.year}/${this.ficha.nombreArchivo}?v=${timestamp}`;
             this._changeDetectorRef.markForCheck();
         });
 

@@ -18,6 +18,7 @@ import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { FiltersService } from './filters.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { environment } from 'environments/environment';
 
 @Component({
     selector: 'app-filters',
@@ -25,7 +26,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     templateUrl: './filters.component.html',
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ MatSidenavModule, MatRippleModule, NgClass, MatIconModule, NgIf, NgFor, MatButtonModule, MatFormFieldModule, MatInputModule, MatCheckboxModule, MatRadioModule, FormsModule, MatDatepickerModule, MatSelectModule, TitleCasePipe, MatMenuModule, MatPaginatorModule, RouterOutlet, RouterLink, ReactiveFormsModule, MatProgressSpinnerModule],
+    imports: [ MatSidenavModule, MatRippleModule, MatIconModule, NgIf, NgFor, MatButtonModule, MatFormFieldModule, MatInputModule, MatCheckboxModule, MatRadioModule, FormsModule, MatDatepickerModule, MatSelectModule, TitleCasePipe, MatMenuModule, MatPaginatorModule, RouterLink, ReactiveFormsModule, MatProgressSpinnerModule],
 })
 export class FiltersComponent implements OnInit, OnDestroy{
 
@@ -68,6 +69,9 @@ export class FiltersComponent implements OnInit, OnDestroy{
     idsQuery: any = {};
 
     idsSelected: any = [];
+
+    urlImagenes: string = environment.urlImages;
+
 
     constructor(
         private location: Location,
@@ -371,9 +375,14 @@ export class FiltersComponent implements OnInit, OnDestroy{
     //-----------------------------------
     getImgRoute(imagen: any): string{
         let image: string = '';
+
         if(imagen !== null){
-            let result = imagen.split("html/")[1];
-            image = `http://3.18.149.205/${result}`;
+            if(imagen.includes('https://')){
+                image = imagen;
+            }else{
+                let result = imagen.split("html/")[1];
+                image = `${this.urlImagenes}/${result}`;
+            }
         }else{
             image = "assets/images/dashboard/thumbnail.png";
         }
