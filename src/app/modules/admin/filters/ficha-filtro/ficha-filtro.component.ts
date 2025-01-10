@@ -4,7 +4,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { FiltersService } from '../filters.service';
-import { FormsModule, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,12 +16,13 @@ import Swal from 'sweetalert2';
 import { ExcelService } from '../../xlsx.service';
 import { VerSinopsisModalComponent } from './modals/ver-sinopsis-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 @Component({
     selector: 'app-ficha-filtro',
     templateUrl: 'ficha-filtro.component.html',
     standalone: true,
-    imports: [CommonModule, RouterLink, MatPaginatorModule, MatFormFieldModule, MatInputModule, FormsModule, MatIconModule, MatButtonModule, ReactiveFormsModule, SanitizedHtmlPipe],
+    imports: [CommonModule, RouterLink, MatPaginatorModule, MatFormFieldModule, MatInputModule, FormsModule, MatIconModule, MatButtonModule, ReactiveFormsModule, SanitizedHtmlPipe, MatButtonToggleModule],
 })
 
 export class FichaFiltroComponent implements OnInit, OnDestroy, AfterViewInit{
@@ -66,6 +67,8 @@ export class FichaFiltroComponent implements OnInit, OnDestroy, AfterViewInit{
     creditos: any = [];
 
     urlImagenes: string = environment.urlImages;
+
+    showTraduction = new FormControl(false);
 
     constructor(
         private router: Router,

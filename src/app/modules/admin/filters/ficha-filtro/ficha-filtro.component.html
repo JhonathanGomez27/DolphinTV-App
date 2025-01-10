@@ -34,10 +34,20 @@
             </div>
             <!-- info programa -->
             <div class="w-full flex flex-col mt-3">
-                <h1 class="text-2xl font-bold text-black tracking-wide">{{programa.titulo}} - {{ficha.duracion}}</h1>
-                <!-- <h1 class="text-lg font-bold text-secondary tracking-wide">{{ficha.nombreArchivo}}</h1> -->
-                <h2 class="text-xl font-semibold tracking-wide text-zinc-500">{{ficha.fechaEmision}}</h2>
-
+                <div class="flex justify-between">
+                    <div class="text">
+                        <h1 class="text-2xl font-bold text-black tracking-wide">{{programa.titulo}} - {{ficha.duracion}}</h1>
+                        <!-- <h1 class="text-lg font-bold text-secondary tracking-wide">{{ficha.nombreArchivo}}</h1> -->
+                        <h2 class="text-xl font-semibold tracking-wide text-zinc-500">{{ficha.fechaEmision}}</h2>
+                    </div>
+                    <div class="button">
+                        <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [formControl]="this.showTraduction">
+                            <mat-button-toggle [value]="false">Original</mat-button-toggle>
+                            <mat-button-toggle [value]="true">Traducción</mat-button-toggle>
+                        </mat-button-toggle-group>
+                    </div>
+                </div>
+                
                 <div class="w-full flex justify-end">
                     <button mat-flat-button [color]="'primary'" (click)="abrirModalSinopsis()">Sinopsis...</button>
                 </div>

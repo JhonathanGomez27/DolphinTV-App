@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { HomeProgramService } from '../home.service';
 import { Observable, Subject, catchError, debounceTime, map, of, takeUntil } from 'rxjs';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -16,12 +16,13 @@ import Swal from 'sweetalert2';
 import { ExcelService } from '../../xlsx.service';
 import { MatDialog } from '@angular/material/dialog';
 import { VerCreditosModalComponent } from '../modals/ver-creditos-modal/ver-creditos-modal.component';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-program-info',
   standalone: true,
   templateUrl: './program-info.component.html',
-  imports: [CommonModule, MatIconModule, MatButtonModule, RouterLink, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule, MatPaginatorModule, SanitizedHtmlPipe],
+  imports: [CommonModule, MatIconModule, MatButtonModule, RouterLink, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule, MatPaginatorModule, SanitizedHtmlPipe, MatButtonToggleModule],
 })
 export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
 
@@ -66,6 +67,8 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
     creditos: any = [];
 
     urlImagenes: string = environment.urlImages;
+    
+    showTraduction = new FormControl(false);
 
     constructor(
         private router: Router,
@@ -373,4 +376,5 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
     // trans(){
     //     console.log(1);
     // }
+
 }
