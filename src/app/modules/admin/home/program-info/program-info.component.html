@@ -128,9 +128,16 @@
                 <ng-container *ngFor="let item of subtitulos">
                     <div class="w-full p-3 cursor-pointer hover:bg-zinc-100 hover:shadow-md" [ngClass]="{'bg-zinc-300': item.clavePrincipal === subtituloActual}" (click)="setCurTime(item.tiempo_Inicio)">
                         <a class="text-black">{{item.tiempo_Inicio}} - {{item.tiempo_Fin}}</a>
-                        <p class="text-secondary" [innerHTML]="transformarData(item.textoOriginal) | sanitizeHtml">
+                        <ng-container *ngIf="showOriginal; else showTraduccion">
+                            <p class="text-secondary" [innerHTML]="transformarData(item.textoOriginal) | sanitizeHtml">
+                            </p>
+                        </ng-container>
+
+                        <ng-template #showTraduccion>
+                            <p class="text-secondary" [innerHTML]="transformarData(item.textoTraducido) | sanitizeHtml">
+                            </p>
+                        </ng-template>
                             <!-- {{item.textoOriginal}} -->
-                        </p>
                     </div>
                 </ng-container>
                 <mat-paginator class="bg-transparent" [length]="totalResponse" [pageIndex]="page" [pageSize]="20" [showFirstLastButtons]="true" (page)="handlePageEnvent($event)"></mat-paginator>

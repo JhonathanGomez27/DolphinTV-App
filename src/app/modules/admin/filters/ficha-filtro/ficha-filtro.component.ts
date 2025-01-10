@@ -69,6 +69,7 @@ export class FichaFiltroComponent implements OnInit, OnDestroy, AfterViewInit{
     urlImagenes: string = environment.urlImages;
 
     showTraduction = new FormControl(false);
+    showOriginal: boolean = true;
 
     constructor(
         private router: Router,
@@ -154,6 +155,10 @@ export class FichaFiltroComponent implements OnInit, OnDestroy, AfterViewInit{
             this._changeDetectorRef.markForCheck();
         });
 
+        this.showTraduction.valueChanges.pipe(takeUntil(this._unsubscribeAll)).subscribe((value) => {
+            this.showOriginal = !value;
+            this._changeDetectorRef.markForCheck();
+        });
 
         //  this.myScriptElement.ontimeupdate  = () => {
         //     this.checkSubtitles();
@@ -307,8 +312,8 @@ export class FichaFiltroComponent implements OnInit, OnDestroy, AfterViewInit{
     }
 
     transformarData(value:any):String{
-        if(this.searchControl.value === ''){
-            return value;
+        if(this.searchControl.value === '' || !this.showOriginal){
+            return value || '';
         }
         const searchValue = this.searchControl.value;
         const regEx = new RegExp(searchValue, "ig");

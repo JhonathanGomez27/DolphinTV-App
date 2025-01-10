@@ -41,7 +41,7 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
     page: number = 0;
 
     //search bar
-    searchControl: UntypedFormControl = new UntypedFormControl();
+    searchControl: UntypedFormControl = new UntypedFormControl('');
     debounce: number = 1500;
     loading: boolean = false;
 
@@ -67,8 +67,9 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
     creditos: any = [];
 
     urlImagenes: string = environment.urlImages;
-    
+
     showTraduction = new FormControl(false);
+    showOriginal:boolean = true;
 
     constructor(
         private router: Router,
@@ -173,6 +174,11 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
 
         this._programService.creditos.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
             this.creditos = response;
+            this._changeDetectorRef.markForCheck();
+        });
+
+        this.showTraduction.valueChanges.pipe(takeUntil(this._unsubscribeAll)).subscribe((value) => {
+            this.showOriginal = !value;
             this._changeDetectorRef.markForCheck();
         });
     }
@@ -334,8 +340,8 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
     }
 
     transformarData(value:any):String{
-        if(this.searchControl.value === ''){
-            return value;
+        if(this.searchControl.value === '' || !this.showOriginal){
+            return value || '';
         }
         const searchValue = this.searchControl.value;
         const regEx = new RegExp(searchValue, "ig");
