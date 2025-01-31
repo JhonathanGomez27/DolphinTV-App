@@ -212,4 +212,8 @@ export class HomeProgramService {
             })
         );
     }
+
+    downloadFile(fileUrl: string) {
+        return this._httpClient.get(fileUrl, {responseType: 'blob'});
+    }
 }

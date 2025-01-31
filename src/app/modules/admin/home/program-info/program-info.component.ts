@@ -367,6 +367,41 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
         );
     }
 
+    descargarArchivosSrt(){
+
+        const archivos = [];
+        const route = { route: `${this.urlImagenes}/assets/subtitulos/${this.ficha.id_programa}/${this.ficha.codigoArchivo}.srt`, name: `${this.ficha.codigoArchivo}.srt`};
+        let route2 = { route: '', name: ''};
+        if(this.programa.idioma === 'ENG'){
+            route2 = { route: `${this.urlImagenes}/assets/subtitulos/${this.ficha.id_programa}/${this.ficha.codigoArchivo}_spanish.srt`, name: `${this.ficha.codigoArchivo}_spanish.srt`};
+        }else{
+            route2 = { route: `${this.urlImagenes}/assets/subtitulos/${this.ficha.id_programa}/${this.ficha.codigoArchivo}_english.srt`, name: `${this.ficha.codigoArchivo}_english.srt`};
+        }
+
+        archivos.push(route);
+        archivos.push(route2);
+
+        // console.log(archivos);
+
+        archivos.forEach(element => {
+            this._programService.downloadFile(element.route).pipe(takeUntil(this._unsubscribeAll)).subscribe({
+                next: (response:any) => {
+                    const url = window.URL.createObjectURL(response);
+                    const anchor = document.createElement('a');
+                    anchor.href = url;
+                    anchor.download = element.name; // Nombre predeterminado para el archivo descargado
+                    anchor.click();
+                    window.URL.revokeObjectURL(url); // Limpiar URL temporal
+                },error: (error) => {
+                    // this.Toast.fire({
+                    //     icon: 'error',
+                    //     title: 'Error al descargar subtitulos'
+                    // });
+                }
+            });
+        });
+
+    }
     //-----------------------------------
     // Modales
     //-----------------------------------

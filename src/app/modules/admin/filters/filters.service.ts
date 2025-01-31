@@ -185,4 +185,8 @@ export class FiltersService {
             })
         );
     }
+
+    downloadFile(fileUrl: string) {
+        return this._httpClient.get(fileUrl, {responseType: 'blob'});
+    }
 }
