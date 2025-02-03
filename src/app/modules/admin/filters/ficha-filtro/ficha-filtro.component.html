@@ -17,7 +17,7 @@
                     <mat-icon
                         class="icon-size-5 text-secondary"
                         [svgIcon]="'heroicons_mini:chevron-right'"></mat-icon>
-                    <a class="ml-1 text-primary-500">{{ficha.codigoArchivo}}</a>
+                    <a class="ml-1 text-primary-500">{{ficha.codigoArchivo  | formatText:'_':' '}}</a>
                 </div>
             </div>
             <!-- back button -->

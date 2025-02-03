@@ -10,12 +10,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FormatTextPipe } from 'app/shared/pipes/format-text.pipe';
 
 @Component({
   selector: 'app-year-info',
   standalone: true,
   templateUrl: './year-info.component.html',
-  imports: [CommonModule, RouterLink, MatPaginatorModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatIconModule, MatMenuModule],
+  imports: [CommonModule, RouterLink, MatPaginatorModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatIconModule, MatMenuModule, MatTooltipModule, FormatTextPipe],
 })
 export class YearInfoComponent implements OnInit{
 

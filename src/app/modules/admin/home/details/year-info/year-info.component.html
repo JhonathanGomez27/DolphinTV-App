@@ -52,11 +52,13 @@
                     </div>
                 </div> -->
                 <div class="mt-2"></div>
-                <!-- info cap -->
-                <h1 class="text-xl font-bold text-black tracking-normal">{{item.nombreArchivo}}</h1>
-                <h3 class="text-secondary text-lg font-semibold">{{item.fechaEmision}}</h3>
-                <div class="flex justify-end" *ngIf="item.coincidencias">
-                    <h3 class="text-secondary text-lg font-semibold">Coincidencias: {{item.coincidencias}}</h3>
+                <div class="flex flex-col">
+                    <!-- info cap -->
+                    <h1 class="text-xl font-bold text-black tracking-normal" [matTooltip]="item.nombreArchivo">{{item.nombreArchivo | formatText:'_':' '}}</h1>
+                    <h3 class="text-secondary text-lg font-semibold">{{item.fechaEmision}}</h3>
+                    <div class="flex justify-end" *ngIf="item.coincidencias">
+                        <h3 class="text-secondary text-lg font-semibold">Coincidencias: {{item.coincidencias}}</h3>
+                    </div>
                 </div>
             </a>
         </ng-container>

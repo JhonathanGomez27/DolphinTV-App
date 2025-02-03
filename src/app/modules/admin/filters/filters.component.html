@@ -228,7 +228,7 @@
                                                         <img class="h-full object-cover opacity-20" [src]="getImgRoute(item.programa.imagen)" alt="">
                                                     </a>
                                                     <a class="col-span-3 flex flex-col" [routerLink]="['/programas/filtro', item.programa.clavePrincipal, ficha.clavePrincipal]" queryParamsHandling="merge">
-                                                        <p class="font-semibold text-xl">{{ficha.nombreArchivo}}</p>
+                                                        <p class="font-semibold text-xl">{{ficha.nombreArchivo | formatText:'_':' '}}</p>
                                                         <p class="text-secondary font-semibold text-xl">{{ficha.copyright}}</p>
                                                     </a>
                                                 </ng-container>

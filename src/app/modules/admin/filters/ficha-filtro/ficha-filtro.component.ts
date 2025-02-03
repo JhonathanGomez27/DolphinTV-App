@@ -17,12 +17,13 @@ import { ExcelService } from '../../xlsx.service';
 import { VerSinopsisModalComponent } from './modals/ver-sinopsis-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { FormatTextPipe } from 'app/shared/pipes/format-text.pipe';
 
 @Component({
     selector: 'app-ficha-filtro',
     templateUrl: 'ficha-filtro.component.html',
     standalone: true,
-    imports: [CommonModule, RouterLink, MatPaginatorModule, MatFormFieldModule, MatInputModule, FormsModule, MatIconModule, MatButtonModule, ReactiveFormsModule, SanitizedHtmlPipe, MatButtonToggleModule],
+    imports: [CommonModule, RouterLink, MatPaginatorModule, MatFormFieldModule, MatInputModule, FormsModule, MatIconModule, MatButtonModule, ReactiveFormsModule, SanitizedHtmlPipe, MatButtonToggleModule, FormatTextPipe],
 })
 
 export class FichaFiltroComponent implements OnInit, OnDestroy, AfterViewInit{

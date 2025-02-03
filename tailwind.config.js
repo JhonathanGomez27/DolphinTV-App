@@ -14,6 +14,7 @@ const customPalettes = {
     telecafe: generatePalette('#2c3615'),
     canaltrece: generatePalette('#ff9101'),
     ccbm: generatePalette('#03082b'),
+    aristegui: generatePalette('#b42430'),
 };
 
 /**
@@ -41,7 +42,7 @@ const themes = {
     // Rest of the themes will use the 'default' as the base
     // theme and will extend it with their given configuration.
     'brand' : {
-        primary: customPalettes.ccbm
+        primary: customPalettes.aristegui
     },
     'teal'  : {
         primary: {

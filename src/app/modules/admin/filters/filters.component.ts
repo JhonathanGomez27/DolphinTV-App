@@ -19,6 +19,7 @@ import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/route
 import { FiltersService } from './filters.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { environment } from 'environments/environment';
+import { FormatTextPipe } from 'app/shared/pipes/format-text.pipe';
 
 @Component({
     selector: 'app-filters',
@@ -26,7 +27,7 @@ import { environment } from 'environments/environment';
     templateUrl: './filters.component.html',
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ MatSidenavModule, MatRippleModule, MatIconModule, NgIf, NgFor, MatButtonModule, MatFormFieldModule, MatInputModule, MatCheckboxModule, MatRadioModule, FormsModule, MatDatepickerModule, MatSelectModule, TitleCasePipe, MatMenuModule, MatPaginatorModule, RouterLink, ReactiveFormsModule, MatProgressSpinnerModule],
+    imports: [ MatSidenavModule, MatRippleModule, MatIconModule, NgIf, NgFor, MatButtonModule, MatFormFieldModule, MatInputModule, MatCheckboxModule, MatRadioModule, FormsModule, MatDatepickerModule, MatSelectModule, TitleCasePipe, MatMenuModule, MatPaginatorModule, RouterLink, ReactiveFormsModule, MatProgressSpinnerModule, FormatTextPipe],
 })
 export class FiltersComponent implements OnInit, OnDestroy{
 

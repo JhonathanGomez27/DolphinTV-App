@@ -8,12 +8,13 @@ import { FiltersService } from '../filters.service';
 import { Subject, takeUntil } from 'rxjs';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { environment } from 'environments/environment';
+import { FormatTextPipe } from 'app/shared/pipes/format-text.pipe';
 
 @Component({
   selector: 'app-details',
   standalone: true,
   templateUrl: './details.component.html',
-  imports: [CommonModule, MatButtonModule, MatIconModule, RouterLink, TitleCasePipe, MatPaginatorModule],
+  imports: [CommonModule, MatButtonModule, MatIconModule, RouterLink, TitleCasePipe, MatPaginatorModule, FormatTextPipe],
 })
 export class DetailsComponent implements OnInit, OnDestroy{
 
