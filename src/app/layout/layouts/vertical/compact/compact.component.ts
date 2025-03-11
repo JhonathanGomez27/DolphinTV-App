@@ -1,14 +1,16 @@
-import { NgIf } from '@angular/common';
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { FuseFullscreenComponent } from '@fuse/components/fullscreen';
 import { FuseLoadingBarComponent } from '@fuse/components/loading-bar';
 import { FuseNavigationService, FuseVerticalNavigationComponent } from '@fuse/components/navigation';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { NavigationService } from 'app/core/navigation/navigation.service';
 import { Navigation } from 'app/core/navigation/navigation.types';
+import { UserService } from 'app/core/user/user.service';
 import { LanguagesComponent } from 'app/layout/common/languages/languages.component';
 import { MessagesComponent } from 'app/layout/common/messages/messages.component';
 import { NotificationsComponent } from 'app/layout/common/notifications/notifications.component';
@@ -23,7 +25,7 @@ import { Subject, takeUntil } from 'rxjs';
     templateUrl  : './compact.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone   : true,
-    imports      : [FuseLoadingBarComponent, MatButtonModule, MatIconModule, LanguagesComponent, FuseFullscreenComponent, SearchComponent, ShortcutsComponent, MessagesComponent, NotificationsComponent, UserComponent, NgIf, RouterOutlet, QuickChatComponent, FuseVerticalNavigationComponent],
+    imports      : [FuseLoadingBarComponent, MatButtonModule, MatIconModule , FuseFullscreenComponent, UserComponent, NgIf, RouterOutlet, FuseVerticalNavigationComponent, MatTooltipModule, NgTemplateOutlet, RouterOutlet, RouterLink, SearchComponent],
 })
 export class CompactLayoutComponent implements OnInit, OnDestroy
 {
@@ -31,6 +33,10 @@ export class CompactLayoutComponent implements OnInit, OnDestroy
     navigation: Navigation;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
+
+    color: string = 'bg-primary';
+    image: string = 'assets/images/logo/logo_icono.png';
+    defaultIconTpl: any;
     /**
      * Constructor
      */
@@ -40,6 +46,8 @@ export class CompactLayoutComponent implements OnInit, OnDestroy
         private _navigationService: NavigationService,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _fuseNavigationService: FuseNavigationService,
+        private _userService: UserService,
+        private _changeDetectorRef: ChangeDetectorRef
     )
     {
     }
@@ -81,6 +89,11 @@ export class CompactLayoutComponent implements OnInit, OnDestroy
                 // Check if the screen is small
                 this.isScreenSmall = !matchingAliases.includes('md');
             });
+        this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
+            this.color = response.color ? response.color : '#13c00d';
+            this.image = response.image ? response.image : 'assets/images/logo/logo_icono.png';
+            this._changeDetectorRef.markForCheck();
+        });
     }
 
     /**

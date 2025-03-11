@@ -6,17 +6,17 @@
         <div class="min-h-100 ">
             <!-- Breadcrumbs -->
             <div class="flex flex-wrap items-center font-medium p-2">
-                <a class="whitespace-nowrap text-primary-500" [routerLink]="['/programas/filtro']" queryParamsHandling="merge">Filtros</a>
+                <a class="whitespace-nowrap" [ngStyle]="colorStyles" [routerLink]="['/filtros']" queryParamsHandling="merge">Filtros</a>
                 <div class="flex items-center ml-1 whitespace-nowrap">
                     <mat-icon
                         class="icon-size-5 text-secondary"
                         [svgIcon]="'heroicons_mini:chevron-right'"></mat-icon>
-                    <a class="ml-1 text-primary-500">{{programa.titulo}}</a>
+                    <a class="ml-1" [ngStyle]="colorStyles">{{programa.titulo}}</a>
                 </div>
             </div>
             <!-- back button -->
             <div class="w-full p-2">
-                <button class="cursor-pointer p-2 flex items-center rounded-none bg-gray-100 text-lg" mat-flat-button [routerLink]="['/programas/filtro']" queryParamsHandling="merge">
+                <button class="cursor-pointer p-2 flex items-center rounded-none bg-gray-100 text-lg" mat-flat-button [routerLink]="['/filtros']" queryParamsHandling="merge">
                     <mat-icon class="text-current icon-size-4 mr-5" [svgIcon]="'mat_outline:arrow_back_ios'"></mat-icon>&nbsp; Volver
                 </button>
             </div>
@@ -44,7 +44,7 @@
         <!-- CONTENT GOES HERE -->
         <div class="min-h-100 py-10">
             <ng-container *ngFor="let item of fichas">
-                <a class="flex flex-col border p-3 border-l-8 border-zinc-200 mb-3 cursor-pointer hover:bg-zinc-100 hover:shadow-md" [routerLink]="['/programas/filtro', programa.clavePrincipal, item.ficha.clavePrincipal]" queryParamsHandling="merge">
+                <a class="flex flex-col border p-3 border-l-8 border-zinc-200 mb-3 cursor-pointer hover:bg-zinc-100 hover:shadow-md" [routerLink]="['/filtros', programa.clavePrincipal, item.ficha.clavePrincipal]" queryParamsHandling="merge">
                     <div class="flex flex-row justify-between items-center">
                         <p class="text-xl font-bold text-black">{{item.ficha.nombreArchivo  | formatText:'_':' '}}</p>
                         <p class="text-lg font-normal text-secondary" *ngIf="item.coincidencias">{{item.coincidencias}} Conicidencias</p>

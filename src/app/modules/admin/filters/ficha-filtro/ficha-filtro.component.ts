@@ -18,6 +18,7 @@ import { VerSinopsisModalComponent } from './modals/ver-sinopsis-modal.component
 import { MatDialog } from '@angular/material/dialog';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { FormatTextPipe } from 'app/shared/pipes/format-text.pipe';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: 'app-ficha-filtro',
@@ -71,13 +72,15 @@ export class FichaFiltroComponent implements OnInit, OnDestroy, AfterViewInit{
 
     showTraduction = new FormControl(false);
     showOriginal: boolean = true;
+    color: string = '#13c00d';
 
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private _filtersService: FiltersService,
         private _changeDetectorRef: ChangeDetectorRef,
-        private _xlsxService: ExcelService, public dialog: MatDialog
+        private _xlsxService: ExcelService, public dialog: MatDialog,
+        private _userService: UserService
     ) {
         this.Toast = Swal.mixin({
             toast: true,
@@ -150,6 +153,11 @@ export class FichaFiltroComponent implements OnInit, OnDestroy, AfterViewInit{
                 this.buscarData();
             }
          });
+
+         this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
+            this.color = response.color ? response.color : '#13c00d';
+            this._changeDetectorRef.markForCheck();
+        });
 
         this._filtersService.creditos.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
             this.creditos = response;
@@ -318,7 +326,8 @@ export class FichaFiltroComponent implements OnInit, OnDestroy, AfterViewInit{
         }
         const searchValue = this.searchControl.value;
         const regEx = new RegExp(searchValue, "ig");
-        const temp =  value.replace(regEx, `<strong class="font-bold text-primary">${searchValue}</strong>`);
+        const color = this.color;
+        const temp = value.replace(regEx, `<strong class="font-bold text-[${color}]">${searchValue}</strong>`);
         return temp;
     }
 
@@ -384,5 +393,13 @@ export class FichaFiltroComponent implements OnInit, OnDestroy, AfterViewInit{
 
         dialogRef.afterClosed().subscribe(result => {
         });
+    }
+
+    get colorStyles(): any{
+        return {'color': this.color};
+    }
+
+    get backgroundStyles(): any{
+        return {'background-color': this.color, 'color': 'white'};
     }
 }

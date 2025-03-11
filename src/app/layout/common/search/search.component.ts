@@ -1,7 +1,7 @@
 import { Overlay } from '@angular/cdk/overlay';
 import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, EventEmitter, HostBinding, inject, Input, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, inject, Input, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { MAT_AUTOCOMPLETE_SCROLL_STRATEGY, MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,7 +9,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations/public-api';
 import { debounceTime, filter, map, Subject, takeUntil } from 'rxjs';
 
@@ -52,6 +52,8 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
         private _elementRef: ElementRef,
         private _httpClient: HttpClient,
         private _renderer2: Renderer2,
+        private _changeDetector: ChangeDetectorRef,
+        private router: Router
     )
     {
     }
@@ -130,39 +132,14 @@ export class SearchComponent implements OnChanges, OnInit, OnDestroy
     ngOnInit(): void
     {
         // Subscribe to the search field value changes
-        this.searchControl.valueChanges
-            .pipe(
-                debounceTime(this.debounce),
-                takeUntil(this._unsubscribeAll),
-                map((value) =>
-                {
-                    // Set the resultSets to null if there is no value or
-                    // the length of the value is smaller than the minLength
-                    // so the autocomplete panel can be closed
-                    if ( !value || value.length < this.minLength )
-                    {
-                        this.resultSets = null;
-                    }
+        this.searchControl.valueChanges.pipe(debounceTime(this.debounce),takeUntil(this._unsubscribeAll)).subscribe((value) =>
+        {
+            if(value !== ''){
+                this.router.navigate(['filtros'], {queryParams: {busqueda: value}});
+            }
 
-                    // Continue
-                    return value;
-                }),
-                // Filter out undefined/null/false statements and also
-                // filter out the values that are smaller than minLength
-                filter(value => value && value.length >= this.minLength),
-            )
-            .subscribe((value) =>
-            {
-                this._httpClient.post('api/common/search', {query: value})
-                    .subscribe((resultSets: any) =>
-                    {
-                        // Store the result sets
-                        this.resultSets = resultSets;
-
-                        // Execute the event
-                        this.search.next(resultSets);
-                    });
-            });
+            this._changeDetector.markForCheck();
+        });
     }
 
     /**

@@ -15,7 +15,7 @@
             <div class="flex items-center h-20 pt-6 px-8 mb-4">
                 <img [routerLink]="['/programas']"
                     class="w-12 cursor-pointer"
-                    src="assets/images/logo/aristegui_logo.png"
+                    [src]="image"
                     alt="Logo image">
             </div>
         </ng-container>
@@ -26,7 +26,7 @@
 <div class="flex flex-col flex-auto items-center w-full min-w-0 bg-gray-200 dark:bg-card">
 
     <!-- Header -->
-    <div class="relative flex justify-center w-full overflow-hidden z-49 bg-primary-700 print:hidden">
+    <div class="relative flex justify-center w-full overflow-hidden z-49 print:hidden" [ngStyle]="{'background-color': color}">
         <div class="max-w-360 w-full sm:py-3 sm:m-8 sm:mb-0 md:mt-12 md:mx-8 md:pt-4 md:pb-3 sm:rounded-t-xl border-b sm:shadow-2xl overflow-hidden bg-card">
             <!-- Top bar -->
             <div class="relative flex flex-auto items-center h-16 px-4 md:px-6">
@@ -36,19 +36,19 @@
                         <!-- Light version -->
                         <img [routerLink]="['/programas']"
                             class="w-12 dark:hidden cursor-pointer"
-                            src="assets/images/logo/aristegui_logo.png"
+                            [src]="image"
                             alt="Logo image">
                         <!-- Dark version -->
                         <img [routerLink]="['/programas']"
                             class="hidden dark:flex w-12 cursor-pointer"
-                            src="assets/images/logo/aristegui_logo.png"
+                            [src]="image"
                             alt="Logo image">
                     </div>
                 </ng-container>
                 <!-- Navigation toggle button -->
                 <ng-container *ngIf="isScreenSmall">
                     <div class="flex items-center mx-2">
-                        <img [routerLink]="['/programas']" class="dark:flex w-10 cursor-pointer" src="assets/images/logo/aristegui_logo.png" alt="Logo image">
+                        <img [routerLink]="['/programas']" class="dark:flex w-10 cursor-pointer" [src]="image" alt="Logo image">
                     </div>
                     <!-- <button
                         mat-icon-button
@@ -62,7 +62,7 @@
                     <a mat-icon-button [matTooltip]="'Ir a lista de programas'" [routerLink]="['/programas']">
                         <ng-container [ngTemplateOutlet]="defaultIconTpl"></ng-container>
                     </a>
-                    <a mat-icon-button [matTooltip]="'Ir a filtros'" [routerLink]="['/programas/filtro']">
+                    <a mat-icon-button [matTooltip]="'Ir a filtros'" [routerLink]="['filtros']">
                         <ng-container [ngTemplateOutlet]="defaultIconFiltro"></ng-container>
                     </a>
                     <fuse-fullscreen class="hidden md:block"></fuse-fullscreen>

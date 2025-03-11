@@ -6,23 +6,23 @@
         <div class="min-h-100 ">
             <!-- Breadcrumbs -->
             <div class="flex flex-wrap items-center font-medium p-2">
-                <a class="whitespace-nowrap text-primary-500" [routerLink]="['/programas/filtro']" queryParamsHandling="merge">Filtros</a>
+                <a class="whitespace-nowrap" [ngStyle]="colorStyles" [routerLink]="['/filtros']" queryParamsHandling="merge">Filtros</a>
                 <div class="flex items-center ml-1 whitespace-nowrap">
                     <mat-icon
                         class="icon-size-5 text-secondary"
                         [svgIcon]="'heroicons_mini:chevron-right'"></mat-icon>
-                    <a class="ml-1 text-primary-500" [routerLink]="['/programas/filtro', ficha.id_programa]" queryParamsHandling="merge">{{programa.titulo}}</a>
+                    <a class="ml-1" [ngStyle]="colorStyles" [routerLink]="['/filtros', ficha.id_programa]" queryParamsHandling="merge">{{programa.titulo}}</a>
                 </div>
                 <div class="flex items-center ml-1 whitespace-nowrap">
                     <mat-icon
                         class="icon-size-5 text-secondary"
                         [svgIcon]="'heroicons_mini:chevron-right'"></mat-icon>
-                    <a class="ml-1 text-primary-500">{{ficha.codigoArchivo  | formatText:'_':' '}}</a>
+                    <a class="ml-1" [ngStyle]="colorStyles">{{ficha.codigoArchivo  | formatText:'_':' '}}</a>
                 </div>
             </div>
             <!-- back button -->
             <div class="flex">
-                <a class="cursor-pointer p-2 flex items-center rounded-none bg-gray-100 text-lg" mat-flat-button [routerLink]="['/programas/filtro', ficha.id_programa]" queryParamsHandling="merge">
+                <a class="cursor-pointer p-2 flex items-center rounded-none bg-gray-100 text-lg" mat-flat-button [routerLink]="['/filtros', ficha.id_programa]" queryParamsHandling="merge">
                     <mat-icon class="text-current icon-size-4 mr-5" [svgIcon]="'mat_outline:arrow_back_ios'"></mat-icon>&nbsp; Volver
                 </a>
             </div>
@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="w-full flex justify-end">
-                    <button mat-flat-button [color]="'primary'" (click)="abrirModalSinopsis()">Sinopsis...</button>
+                    <button mat-flat-button [ngStyle]="backgroundStyles" (click)="abrirModalSinopsis()">Sinopsis...</button>
                 </div>
             </div>
             <!-- tags -->

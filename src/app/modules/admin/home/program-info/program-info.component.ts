@@ -17,6 +17,7 @@ import { ExcelService } from '../../xlsx.service';
 import { MatDialog } from '@angular/material/dialog';
 import { VerCreditosModalComponent } from '../modals/ver-creditos-modal/ver-creditos-modal.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
   selector: 'app-program-info',
@@ -71,13 +72,16 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
     showTraduction = new FormControl(false);
     showOriginal:boolean = true;
 
+    color: string = '#13c00d';
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private _programService: HomeProgramService,
         private _changeDetectorRef: ChangeDetectorRef,
         private httpCliente: HttpClient,
-        private _xlsxService: ExcelService, public dialog: MatDialog
+        private _xlsxService: ExcelService, public dialog: MatDialog,
+        private _userService: UserService,
     ){
         this.activatedRoute.params.subscribe((params) => {
             this.routeBack = `/programas/ver/${params.programa}/${params.year}`;
@@ -179,6 +183,11 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
 
         this.showTraduction.valueChanges.pipe(takeUntil(this._unsubscribeAll)).subscribe((value) => {
             this.showOriginal = !value;
+            this._changeDetectorRef.markForCheck();
+        });
+
+        this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
+            this.color = response.color ? response.color : '#13c00d';
             this._changeDetectorRef.markForCheck();
         });
     }
@@ -345,7 +354,8 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
         }
         const searchValue = this.searchControl.value;
         const regEx = new RegExp(searchValue, "ig");
-        const temp =  value.replace(regEx, `<strong class="font-bold text-black">${searchValue}</strong>`);
+        const color = this.color;
+        const temp = value.replace(regEx, `<strong class="font-bold text-[${color}]">${searchValue}</strong>`);
         return temp;
     }
 
@@ -417,5 +427,13 @@ export class ProgramInfoComponent implements OnInit, OnDestroy, AfterViewInit{
     // trans(){
     //     console.log(1);
     // }
+
+    get colorStyles(): any{
+        return {'color': this.color};
+    }
+
+    get backgroundStyles(): any{
+        return {'background-color': this.color, 'color': 'white'};
+    }
 
 }

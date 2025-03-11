@@ -9,6 +9,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { environment } from 'environments/environment';
 import { FormatTextPipe } from 'app/shared/pipes/format-text.pipe';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
   selector: 'app-details',
@@ -31,7 +32,7 @@ export class DetailsComponent implements OnInit, OnDestroy{
 
     loading: boolean = false;
     urlImagenes: string = environment.urlImages;
-
+    color: string = '#13c00d';
 
     constructor(
         private location: Location,
@@ -40,6 +41,7 @@ export class DetailsComponent implements OnInit, OnDestroy{
         private _filtersService: FiltersService,
         private router: Router,
         private activatedRoute: ActivatedRoute,
+        private _userService: UserService,
     ){
 
     }
@@ -63,6 +65,11 @@ export class DetailsComponent implements OnInit, OnDestroy{
         this._filtersService.filtroResultado.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
             this.fichas = response.resultados;
             this.totalResultados = response.total;
+            this._changeDetectorRef.markForCheck();
+        });
+
+        this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
+            this.color = response.color ? response.color : '#13c00d';
             this._changeDetectorRef.markForCheck();
         });
     }
@@ -118,7 +125,7 @@ export class DetailsComponent implements OnInit, OnDestroy{
         let image: string = '';
 
         if(imagen !== null){
-            if(imagen.includes('https://')){
+            if(imagen.includes('https://') || imagen.includes('http://')){
                 image = imagen;
             }else{
                 let result = imagen.split("html/")[1];
@@ -136,5 +143,13 @@ export class DetailsComponent implements OnInit, OnDestroy{
     //-----------------------------------
     back(): void {
         this.location.back();
+    }
+
+    get colorStyles(): any{
+        return {'color': this.color};
+    }
+
+    get backgroundStyles(): any{
+        return {'background-color': this.color, 'color': 'white'};
     }
 }

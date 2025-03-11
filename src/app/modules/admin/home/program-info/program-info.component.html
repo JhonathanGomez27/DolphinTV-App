@@ -6,24 +6,24 @@
         <div class="min-h-100 ">
             <!-- Breadcrumbs -->
             <div class="flex flex-wrap items-center font-medium mb-2">
-                <a class="whitespace-nowrap text-primary-500" [routerLink]="['/programas']">Programas</a>
+                <a class="whitespace-nowrap" [ngStyle]="colorStyles" [routerLink]="['/programas']">Programas</a>
                 <div class="flex items-center ml-1 whitespace-nowrap">
                     <mat-icon
                         class="icon-size-5 text-secondary"
                         [svgIcon]="'heroicons_mini:chevron-right'"></mat-icon>
-                    <a class="ml-1 text-primary-500" [routerLink]="['/programas/ver', params.programa]">{{programa.titulo}}</a>
+                    <a class="ml-1" [ngStyle]="colorStyles" [routerLink]="['/programas/ver', params.programa]">{{programa.titulo}}</a>
                 </div>
                 <div class="flex items-center ml-1 whitespace-nowrap">
                     <mat-icon
                         class="icon-size-5 text-secondary"
                         [svgIcon]="'heroicons_mini:chevron-right'"></mat-icon>
-                    <a class="ml-1 text-primary-500" [routerLink]="['/programas/ver', params.programa, params.year]" queryParamsHandling="merge">{{params.year !== 'undefined'? params.year: 'Sin fecha'}}</a>
+                    <a class="ml-1" [ngStyle]="colorStyles" [routerLink]="['/programas/ver', params.programa, params.year]" queryParamsHandling="merge">{{params.year !== 'undefined'? params.year: 'Sin fecha'}}</a>
                 </div>
                 <div class="flex items-center ml-1 whitespace-nowrap">
                     <mat-icon
                         class="icon-size-5 text-secondary"
                         [svgIcon]="'heroicons_mini:chevron-right'"></mat-icon>
-                    <a class="ml-1 text-primary-500" >{{ficha.codigoArchivo}}</a>
+                    <a class="ml-1" [ngStyle]="colorStyles">{{ficha.codigoArchivo}}</a>
                 </div>
             </div>
             <!-- back button -->
@@ -63,7 +63,7 @@
                 </div>
 
                 <div class="w-full flex justify-end">
-                    <button mat-flat-button [color]="'primary'" (click)="abrirModalCreditos()">Sinopsis...</button>
+                    <button mat-flat-button [ngStyle]="backgroundStyles" (click)="abrirModalCreditos()">Sinopsis...</button>
                 </div>
             </div>
             <!-- tags -->

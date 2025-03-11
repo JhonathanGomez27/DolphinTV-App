@@ -1,5 +1,5 @@
-import { NgIf, NgTemplateOutlet } from '@angular/common';
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { NgClass, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
@@ -9,28 +9,28 @@ import { FuseHorizontalNavigationComponent, FuseNavigationService, FuseVerticalN
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { NavigationService } from 'app/core/navigation/navigation.service';
 import { Navigation } from 'app/core/navigation/navigation.types';
-import { LanguagesComponent } from 'app/layout/common/languages/languages.component';
-import { MessagesComponent } from 'app/layout/common/messages/messages.component';
-import { NotificationsComponent } from 'app/layout/common/notifications/notifications.component';
-import { SearchComponent } from 'app/layout/common/search/search.component';
-import { ShortcutsComponent } from 'app/layout/common/shortcuts/shortcuts.component';
 import { UserComponent } from 'app/layout/common/user/user.component';
 import { Subject, takeUntil } from 'rxjs';
-import { appConfig } from 'app/app.config';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector     : 'material-layout',
     templateUrl  : './material.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone   : true,
-    imports      : [FuseLoadingBarComponent, NgIf, FuseVerticalNavigationComponent, MatButtonModule, MatIconModule, LanguagesComponent, FuseFullscreenComponent, SearchComponent, ShortcutsComponent, MessagesComponent, NotificationsComponent, UserComponent, FuseHorizontalNavigationComponent, RouterOutlet, RouterLink, MatTooltipModule, NgTemplateOutlet],
+    imports      : [FuseLoadingBarComponent, NgIf, FuseVerticalNavigationComponent, MatButtonModule, MatIconModule, FuseFullscreenComponent, UserComponent, FuseHorizontalNavigationComponent, RouterOutlet, RouterLink, MatTooltipModule, NgTemplateOutlet, NgStyle],
 })
 export class MaterialLayoutComponent implements OnInit, OnDestroy
 {
     isScreenSmall: boolean;
     navigation: Navigation;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+
+    estilos: any = {};
+
+    color: string = 'bg-primary';
+    image: string = 'assets/images/logo/logo_icono.png';
     /**
      * Constructor
      */
@@ -40,6 +40,8 @@ export class MaterialLayoutComponent implements OnInit, OnDestroy
         private _navigationService: NavigationService,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _fuseNavigationService: FuseNavigationService,
+        private _userService: UserService,
+        private _changeDetectorRef: ChangeDetectorRef
     )
     {
     }
@@ -81,6 +83,12 @@ export class MaterialLayoutComponent implements OnInit, OnDestroy
                 // Check if the screen is small
                 this.isScreenSmall = !matchingAliases.includes('md');
             });
+
+        this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
+            this.color = response.color ? response.color : '#13c00d';
+            this.image = response.image ? response.image : 'assets/images/logo/logo_icono.png';
+            this._changeDetectorRef.markForCheck();
+        });
     }
 
     /**
@@ -112,6 +120,11 @@ export class MaterialLayoutComponent implements OnInit, OnDestroy
             // Toggle the opened status
             navigation.toggle();
         }
+    }
+
+    get bgColorClass(): string {
+        // console.log(`bg-[${this.color}]`);
+        return `bg-[${this.color}]`;
     }
 
 }

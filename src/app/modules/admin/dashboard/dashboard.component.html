@@ -1,15 +1,10 @@
-<div class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto" cdkScrollable>
-
-    <!-- Main -->
+<!-- <div class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto" cdkScrollable>
     <div class="flex-auto  p-6 sm:p-10 bg-card background-stilo">
-
-        <!-- CONTENT GOES HERE -->
         <div class="grid grid-cols-1 md:grid-cols-2 h-full">
             <div class="col-span-1 flex justify-center items-center">
                 <div class="flex flex-col w-full h-full justify-center items-start p-8">
-                    <h1 class="text-lg font-semibold text-primary-800 text-justify">Bienvenido a la aplicación de búsqueda dinámica y profunda. Con nuestra herramienta innovadora, podrás explorar el vasto contenido televisivo utilizando múltiples parámetros de búsqueda. Desde programas, temas, hasta invitados especiales, nuestra aplicación te proporcionará resultados de manera rápida y precisa. ¿Quieres encontrar ese momento específico en tu programa favorito? No hay problema. Con solo unos pocos clics, podrás visualizar el minuto y segundo exacto en el que se encuentra tu búsqueda. Sumérgete en el mundo con nuestra poderosa herramienta de búsqueda.</h1>
-                    <h2 class="m-4"></h2>
-                    <a href="#" class="bg-transparent hover:bg-primary text-primary hover:text-white rounded shadow hover:shadow-lg py-2 px-4 border border-primary font-bold text-lg" [routerLink]="['/programas']">Ver programas</a>
+                    <h1 class="text-lg font-semibold text-justify" [ngStyle]="{'color': color}">Bienvenido a la aplicación de búsqueda dinámica y profunda. Con nuestra herramienta innovadora, podrás explorar el vasto contenido televisivo utilizando múltiples parámetros de búsqueda. Desde programas, temas, hasta invitados especiales, nuestra aplicación te proporcionará resultados de manera rápida y precisa. ¿Quieres encontrar ese momento específico en tu programa favorito? No hay problema. Con solo unos pocos clics, podrás visualizar el minuto y segundo exacto en el que se encuentra tu búsqueda. Sumérgete en el mundo con nuestra poderosa herramienta de búsqueda.</h1>
+                    <a href="#" class="bg-transparent  rounded shadow hover:shadow-lg py-2 px-4 border font-bold text-lg" [routerLink]="['/programas']" [ngStyle]="{'color': color, 'border-color': color}" [ngClass]="hoverBgColorClass">Ver programas</a>
                 </div>
             </div>
             <div class="col-span-1 flex justify-center items-center">
@@ -21,5 +16,68 @@
             </div>
         </div>
     </div>
+</div> -->
+<!--
+<section class="h-full flex justify-center">
+	<div class="bg-white py-20 flex justify-center" [ngStyle]="{'color': color}">
+		<div class="container mx-auto flex flex-col md:flex-row items-center my-12 md:my-24">
+			<div class="flex flex-col w-full lg:w-1/3 justify-center items-start p-8">
+				<p class="text-md md:text-lg mb-4" [ngStyle]="{'color': color}">Bienvenido a nuestra aplicación de búsqueda avanzada en contenido televisivo. Encuentra programas, temas e invitados con precisión y rapidez. ¿Buscas un momento exacto en tu show favorito? Obtén el minuto y segundo exacto en solo unos clics. Explora con nuestra potente herramienta de búsqueda.</p>
+				<a href="#" class="bg-transparent  rounded shadow hover:shadow-lg py-2 px-4 border font-bold text-lg" [routerLink]="['/programas']" [ngStyle]="{'color': color, 'border-color': color}" [ngClass]="hoverBgColorClass">Ver programas</a>
+			</div>
+			<div class="p-8 mt-12 mb-6 md:mb-0 md:mt-0 ml-0 md:ml-12 lg:w-2/3  justify-center">
+				<div class="h-48 flex flex-wrap content-center">
+                    <div class="w-40 h-60 overflow-hidden rounded-[30%] rotate-[-15deg]">
+                        <img [src]="images[0]" alt="Espacio" class="w-full h-full object-cover">
+                    </div>
+                    <div class="w-60 h-80 overflow-hidden rounded-[40%] -rotate-15">
+                        <img [src]="images[1]" alt="Astronauta" class="w-full h-full object-cover">
+                    </div>
+                    <div class="w-40 h-60 overflow-hidden rounded-[30%] -rotate-15">
+                        <img [src]="images[2]" alt="Cohete" class="w-full h-full object-cover">
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section> -->
 
-</div>
+<section class="w-full flex flex-col justify-center items-center bg-white background-stilo">
+    <div class="w-2/3 p-6 py-12" [ngStyle]="{'background': color}">
+        <div class="container mx-auto p-4">
+            <div class="flex flex-col gap-y-5 items-center justify-between">
+                <div class="space-x-2 text-center py-2 lg:py-0 text-white">
+                    <span class="text-lg font-semibold ">Bienvenido a nuestra aplicación de búsqueda avanzada en contenido televisivo. Encuentra programas, temas e invitados con precisión y rapidez. ¿Buscas un momento exacto en tu show favorito? Obtén el minuto y segundo exacto en solo unos clics. Explora con nuestra potente herramienta de búsqueda.</span>
+                    <!-- <span class="font-bold text-lg">Fre</span> -->
+                </div>
+                <a rel="noreferrer noopener" [routerLink]="['/programas']" class="px-5 mt-4 lg:mt-0 py-3 rounded-md border block bg-white text-lg font-semibold" [ngStyle]="{'color': color}">Ver programas</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="relative flex items-center justify-center w-2/3 dark:text-gray-50 mt-10">
+        <!-- Botón "Anterior" -->
+        <button aria-label="Slide back" type="button" class="absolute left-0 z-30 p-2 ml-10 bg-opacity-50 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-400 dark:bg-gray-900" (click)="prevSlide()">
+          <svg width="8" height="14" fill="none" viewBox="0 0 8 14" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4">
+            <path d="M7 1L1 7L7 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </button>
+
+        <!-- Contenedor del carrusel -->
+        <div class="flex items-center justify-start w-full h-full gap-6 py-4 mx-auto overflow-auto lg:gap-8" #carousel>
+          <ng-container *ngFor="let image of images; let i = index">
+            <div class="relative flex-shrink-0 w-full sm:w-auto">
+              <img class="object-cover object-center dark:bg-gray-500 h-44 aspect-square" [src]="image" [alt]="'Image ' + i"/>
+            </div>
+          </ng-container>
+        </div>
+
+        <!-- Botón "Siguiente" -->
+        <button aria-label="Slide forward" type="button" class="absolute right-0 z-30 p-2 mr-10 bg-opacity-50 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-400 dark:bg-gray-900" (click)="nextSlide()">
+          <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4">
+            <path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </button>
+      </div>
+</section>
+

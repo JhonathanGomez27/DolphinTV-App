@@ -66,7 +66,7 @@
                             <p class="text-secondary font-medium">Idioma</p>
                             <mat-form-field class="w-full mt-2" [subscriptSizing]="'dynamic'">
                                 <mat-select placeholder="Seleccionar Idioma" [formControlName]="'idioma'" (selectionChange)="setQueryParam('idioma', $event.value)">
-                                    <ng-container *ngFor="let item of [null,'ESP']">
+                                    <ng-container *ngFor="let item of [null,'ESP', 'ENG']">
                                         <mat-option [value]="item">{{item | titlecase}}</mat-option>
                                     </ng-container>
                                 </mat-select>
@@ -150,7 +150,7 @@
             </div>
 
             <div class="p-2 mt-2 bg-white">
-                <button class="rounded-none w-full" mat-flat-button [color]="'primary'" (click)="buttonFiltrar()">
+                <button class="rounded-none w-full" mat-flat-button [ngStyle]="backgroundStyles" (click)="buttonFiltrar()">
                     <mat-icon [svgIcon]="'feather:filter'"></mat-icon>
                     <span class="hidden sm:inline-block ml-2">Filtrar</span>
                 </button>
@@ -215,19 +215,19 @@
                         <ng-container *ngIf="totalResultados > 0; else noResultados">
                             <div class="border-2 p-4 mb-4" *ngFor="let item of resultados">
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    <a class="w-full h-60 overflow-hidden" [routerLink]="['/programas/filtro', item.programa.clavePrincipal]" queryParamsHandling="merge">
+                                    <a class="w-full h-60 overflow-hidden" [routerLink]="['/filtros', item.programa.clavePrincipal]" queryParamsHandling="merge">
                                         <img class="h-full object-cover" [src]="getImgRoute(item.programa.imagen)" alt="img video">
                                     </a>
                                     <div class="w-full">
-                                        <a [routerLink]="['/programas/filtro', item.programa.clavePrincipal]" queryParamsHandling="merge"><p class="font-semibold text-2xl">{{item.programa.titulo}}</p></a>
+                                        <a [routerLink]="['/filtros', item.programa.clavePrincipal]" queryParamsHandling="merge"><p class="font-semibold text-2xl">{{item.programa.titulo}}</p></a>
                                         <p class="text-secondary font-medium text-xl">{{item.programa.productora}} - {{item.programa.idioma}}</p>
                                         <div class="grid grid-cols-4 mt-3 items-center gap-4">
                                             <ng-container *ngFor="let ficha of item.fichas;let i = index; let first = first; let last = last">
                                                 <ng-container *ngIf="first || i == 1">
-                                                    <a class="h-14 col-span-1" [routerLink]="['/programas/filtro', item.programa.clavePrincipal, ficha.clavePrincipal]" queryParamsHandling="merge">
-                                                        <img class="h-full object-cover opacity-20" [src]="getImgRoute(item.programa.imagen)" alt="">
+                                                    <a class="h-14 col-span-1" [routerLink]="['/filtros', item.programa.clavePrincipal, ficha.clavePrincipal]" queryParamsHandling="merge">
+                                                        <img class="h-full object-cover opacity-20" [src]="getImgFicha(ficha, item.programa.imagen)" alt="">
                                                     </a>
-                                                    <a class="col-span-3 flex flex-col" [routerLink]="['/programas/filtro', item.programa.clavePrincipal, ficha.clavePrincipal]" queryParamsHandling="merge">
+                                                    <a class="col-span-3 flex flex-col" [routerLink]="['/filtros', item.programa.clavePrincipal, ficha.clavePrincipal]" queryParamsHandling="merge">
                                                         <p class="font-semibold text-xl">{{ficha.nombreArchivo | formatText:'_':' '}}</p>
                                                         <p class="text-secondary font-semibold text-xl">{{ficha.copyright}}</p>
                                                     </a>
@@ -240,7 +240,7 @@
                                 <div class="w-full flex justify-between mt-2 items-center">
                                     <p class="text-secondary" *ngIf="item.fichasPalabra">{{item.fichasPalabra}} conicidencias</p>
                                     <p *ngIf="!item.fichasPalabra"></p>
-                                    <a class="rounded-none hover:shadow-md" [color]="'primary'" mat-flat-button [routerLink]="['/programas/filtro', item.programa.clavePrincipal]" queryParamsHandling="merge">Ver todos los resultados</a>
+                                    <a class="rounded-none hover:shadow-md" [ngStyle]="backgroundStyles" mat-flat-button [routerLink]="['/filtros', item.programa.clavePrincipal]" queryParamsHandling="merge">Ver todos los resultados</a>
                                 </div>
                             </div>
                         </ng-container>

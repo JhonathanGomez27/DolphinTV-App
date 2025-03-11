@@ -73,12 +73,6 @@ export class YearInfoComponent implements OnInit{
             this.yearSelected = params.year;
         })
 
-        this._programService.fichas.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
-            this.fichas = response.data;
-            this.totalFichas = response.total;
-            this._changeDetectorRef.markForCheck();
-        });
-
         this._programService.programa.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
             this.programa = response.programa;
             if(response.programa.imagen !== null && response.programa.imagen !== ''){
@@ -88,7 +82,7 @@ export class YearInfoComponent implements OnInit{
                 // this.image = `${this.urlImagenes}/${result}`;
 
                 let path = response.programa.imagen;
-                if(!path.includes('https://')){
+                if(!path.includes('https://') && !path.includes('http://')) {
                     let result = path.split("html/")[1];
                     this.image = `${this.urlImagenes}/${result}`;
                 }else{
@@ -97,6 +91,13 @@ export class YearInfoComponent implements OnInit{
             }else{
                 this.image = "assets/images/dashboard/thumbnail.png";
             }
+            this._changeDetectorRef.markForCheck();
+        });
+
+        this._programService.fichas.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
+            this.fichas = this.formatFichas(response.data);
+            // console.log(this.fichas);
+            this.totalFichas = response.total;
             this._changeDetectorRef.markForCheck();
         });
 
@@ -178,5 +179,16 @@ export class YearInfoComponent implements OnInit{
         let page = this.page + 1;
         let busqueda = this.searchControl.value || '';
         this.getFichasPaginated(page, busqueda);
+    }
+
+
+    private formatFichas(fichas: any){
+        return fichas.map((ficha:any) => {
+            const thumb = ficha.thumbnailUrl;
+            return {
+                ...ficha,
+                thumbnailUrl: thumb ? `${this.urlImagenes}/assets/thumbnails/${ficha.id_programa}/${thumb}` : this.image
+            }
+        })
     }
 }

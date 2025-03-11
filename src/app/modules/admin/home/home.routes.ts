@@ -54,31 +54,7 @@ export default [
                     creditos: getCreditosFicha
                 }
             },
-            {
-                path: 'filtro',
-                component: FiltersComponent,
-                resolve: {
-                    programas: getProgramsFilterResolve
-                }
-            },
-            {
-                path: 'filtro/:programa',
-                component: DetailsComponent,
-                resolve: {
-                    programaFiltro: getFiltroByProgramaResolve,
-                    programa: getProgramaByIdResolve
-                }
-            },
-            {
-                path: 'filtro/:programa/:ficha',
-                component: FichaFiltroComponent,
-                resolve:{
-                    fichaInfo: getFichaFilter,
-                    subtitulosFicha: getSubtituloFilter,
-                    programa: getProgramaByIdResolve,
-                    creditos: getCreditosFichaFilter
-                }
-            }
+
         ]
     },
 ] as Routes;

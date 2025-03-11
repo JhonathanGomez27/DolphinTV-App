@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { environment } from 'environments/environment';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
   selector: 'app-list',
@@ -39,11 +40,14 @@ export class ListComponent implements OnInit, OnDestroy {
 
     urlImagenes: string = environment.urlImages;
 
+    color: string = '#13c00d';
+
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private _homProgramsService: HomeProgramService,
-        private _changeDetector: ChangeDetectorRef
+        private _changeDetector: ChangeDetectorRef,
+        private _userService: UserService,
     ){
 
     }
@@ -73,9 +77,14 @@ export class ListComponent implements OnInit, OnDestroy {
         this.searchControl.valueChanges.pipe(debounceTime(this.debounce),takeUntil(this._unsubscribeAll)).subscribe((value) =>
         {
             if(value !== ''){
-                this.router.navigate(['/programas/filtro'], {queryParams: {busqueda: value}});
+                this.router.navigate(['filtros'], {queryParams: {busqueda: value}});
             }
 
+            this._changeDetector.markForCheck();
+        });
+
+        this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
+            this.color = response.color ? response.color : '#13c00d'
             this._changeDetector.markForCheck();
         });
     }
@@ -88,8 +97,9 @@ export class ListComponent implements OnInit, OnDestroy {
 
     getImgRoute(imagen: any): string{
         let image: string = '';
+        // console.log(imagen);
         if(imagen !== null){
-            if(imagen.includes('https://')){
+            if(imagen.includes('https://') || imagen.includes('http://')){
                 image = imagen;
             }else{
                 let result = imagen.split("html/")[1];
@@ -98,7 +108,7 @@ export class ListComponent implements OnInit, OnDestroy {
         }else{
             image = "assets/images/dashboard/thumbnail.png";
         }
-
+        // console.log(image);
         return image;
     }
 

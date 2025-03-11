@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { Location, NgClass, NgFor, NgIf, TitleCasePipe } from '@angular/common';
+import { Location, NgClass, NgFor, NgIf, NgStyle, TitleCasePipe } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { DateAdapter, MAT_DATE_LOCALE, MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,6 +20,7 @@ import { FiltersService } from './filters.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { environment } from 'environments/environment';
 import { FormatTextPipe } from 'app/shared/pipes/format-text.pipe';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: 'app-filters',
@@ -27,7 +28,7 @@ import { FormatTextPipe } from 'app/shared/pipes/format-text.pipe';
     templateUrl: './filters.component.html',
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ MatSidenavModule, MatRippleModule, MatIconModule, NgIf, NgFor, MatButtonModule, MatFormFieldModule, MatInputModule, MatCheckboxModule, MatRadioModule, FormsModule, MatDatepickerModule, MatSelectModule, TitleCasePipe, MatMenuModule, MatPaginatorModule, RouterLink, ReactiveFormsModule, MatProgressSpinnerModule, FormatTextPipe],
+    imports: [ MatSidenavModule, MatRippleModule, MatIconModule, NgIf, NgFor, MatButtonModule, MatFormFieldModule, MatInputModule, MatCheckboxModule, MatRadioModule, FormsModule, MatDatepickerModule, MatSelectModule, TitleCasePipe, MatMenuModule, MatPaginatorModule, RouterLink, ReactiveFormsModule, MatProgressSpinnerModule, FormatTextPipe, NgStyle],
 })
 export class FiltersComponent implements OnInit, OnDestroy{
 
@@ -73,6 +74,7 @@ export class FiltersComponent implements OnInit, OnDestroy{
 
     urlImagenes: string = environment.urlImages;
 
+    color: string = '#13c00d';
 
     constructor(
         private location: Location,
@@ -83,6 +85,7 @@ export class FiltersComponent implements OnInit, OnDestroy{
         private _filterService: FiltersService,
         private router: Router,
         private activatedRoute: ActivatedRoute,
+        private _userService: UserService,
     ) {
         // Initialize the form
         this.programFilterForm = this._formBuilder.group({
@@ -197,6 +200,11 @@ export class FiltersComponent implements OnInit, OnDestroy{
 
         this._filterService.programas.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
             this.programasList = response.data;
+            this._changeDetectorRef.markForCheck();
+        });
+
+        this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe((response: any) => {
+            this.color = response.color ? response.color : '#13c00d';
             this._changeDetectorRef.markForCheck();
         });
 
@@ -378,7 +386,7 @@ export class FiltersComponent implements OnInit, OnDestroy{
         let image: string = '';
 
         if(imagen !== null){
-            if(imagen.includes('https://')){
+            if(imagen.includes('https://') || imagen.includes('http://')){
                 image = imagen;
             }else{
                 let result = imagen.split("html/")[1];
@@ -391,10 +399,39 @@ export class FiltersComponent implements OnInit, OnDestroy{
         return image;
     }
 
+    getImgFicha(ficha: any, imagen: string): string{
+        let imgurl = '';
+
+        if(ficha.thumbnailUrl){
+            imgurl = `${this.urlImagenes}/assets/thumbnails/${ficha.id_programa}/${ficha.thumbnailUrl}`;
+        }else{
+            if(imagen !== null){
+                if(imagen.includes('https://') || imagen.includes('http://')){
+                    imgurl = imagen;
+                }else{
+                    let result = imagen.split("html/")[1];
+                    imgurl = `${this.urlImagenes}/${result}`;
+                }
+            }else{
+                imgurl = "assets/images/dashboard/thumbnail.png";
+            }
+        }
+
+        return imgurl;
+    }
+
     //-----------------------------------
     // router functions
     //-----------------------------------
     back(): void {
         this.location.back();
+    }
+
+    get colorStyles(): any{
+        return {'color': this.color};
+    }
+
+    get backgroundStyles(): any{
+        return {'background-color': this.color, 'color': 'white'};
     }
 }

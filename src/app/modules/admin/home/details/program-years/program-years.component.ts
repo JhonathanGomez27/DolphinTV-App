@@ -10,7 +10,7 @@ import { Subject, takeUntil } from 'rxjs';
   selector: 'app-program-years',
   standalone: true,
   templateUrl: './program-years.component.html',
-  imports: [CommonModule, MatIconModule, MatButtonModule, RouterOutlet, RouterLink, NgIf],
+  imports: [CommonModule, MatIconModule, MatButtonModule, RouterLink],
 })
 export class ProgramYearsComponent implements OnInit{
 

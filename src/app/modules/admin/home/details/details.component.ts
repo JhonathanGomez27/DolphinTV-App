@@ -64,7 +64,7 @@ export class DetailsProgramComponent implements OnInit, OnDestroy{
             this.programData = response.programa;
             if(response.programa.imagen !== null && response.programa.imagen !== ''){
                 let path = response.programa.imagen;
-                if(!path.includes('https://')){
+                if(!path.includes('https://') && !path.includes('http://')) {
                     let result = path.split("html/")[1];
                     this.image = `${this.urlImagenes}/${result}`;
                 }else{

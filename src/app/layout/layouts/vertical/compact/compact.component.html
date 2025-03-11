@@ -3,7 +3,7 @@
 
 <!-- Navigation -->
 <fuse-vertical-navigation
-    class="dark bg-gray-900 print:hidden"
+    class="bg-white print:hidden"
     [appearance]="'compact'"
     [mode]="isScreenSmall ? 'over' : 'side'"
     [name]="'mainNavigation'"
@@ -15,7 +15,7 @@
         <div class="flex items-center justify-center h-20 mt-3 mb-4">
             <img
                 class="w-10"
-                src="assets/images/logo/logo.svg"
+                [src]="image"
                 alt="Logo image">
         </div>
     </ng-container>
@@ -34,18 +34,16 @@
         </button>
         <!-- Components -->
         <div class="flex items-center pl-2 ml-auto space-x-0.5 sm:space-x-2">
-            <languages></languages>
-            <fuse-fullscreen class="hidden md:block"></fuse-fullscreen>
             <search [appearance]="'bar'"></search>
-            <shortcuts></shortcuts>
-            <messages></messages>
-            <notifications></notifications>
-            <button
-                class="lg:hidden"
-                mat-icon-button
-                (click)="quickChat.toggle()">
-                <mat-icon [svgIcon]="'heroicons_outline:chat-bubble-left-right'"></mat-icon>
-            </button>
+
+            <!-- Button -->
+            <a mat-icon-button [matTooltip]="'Ir a lista de programas'" [routerLink]="['/programas']">
+                <ng-container [ngTemplateOutlet]="defaultIconTpl"></ng-container>
+            </a>
+            <a mat-icon-button [matTooltip]="'Ir a filtros'" [routerLink]="['filtros']">
+                <ng-container [ngTemplateOutlet]="defaultIconFiltro"></ng-container>
+            </a>
+            <fuse-fullscreen class="hidden md:block"></fuse-fullscreen>
             <user></user>
         </div>
     </div>
@@ -65,4 +63,12 @@
 </div>
 
 <!-- Quick chat -->
-<quick-chat #quickChat="quickChat"></quick-chat>
+<!-- <quick-chat #quickChat="quickChat"></quick-chat> -->
+<!-- Default icon -->
+<ng-template #defaultIconTpl>
+    <mat-icon [svgIcon]="'heroicons_outline:home'"></mat-icon>
+</ng-template>
+<!-- Default icon -->
+<ng-template #defaultIconFiltro>
+    <mat-icon [svgIcon]="'heroicons_outline:adjustments-vertical'"></mat-icon>
+</ng-template>

@@ -76,6 +76,7 @@ export const appRoutes: Route[] = [
         children: [
             {path: 'programas', loadChildren: () => import('app/modules/admin/home/home.routes')},
             {path: 'home', loadChildren: () => import('app/modules/admin/dashboard/dashboard.routes')},
+            {path: 'filtros', loadChildren: () => import('app/modules/admin/filters/filters.routes')},
             {path: '**', redirectTo: 'programas'}
         ]
     }
